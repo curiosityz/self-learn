@@ -1,981 +1,338 @@
-<!DOCTYPE html><html><head><base href="/"><title>TeachOneself - Self-Learning Framework &amp; Community</title><style>:root {  --neon-blue: #083d87;    /* Deep blue */  --deep-purple: #1A1A1A;  /* Darker background for better contrast */  --highlight: #87e2df;    /* Bright turquoise - good for accents */  --accent-2: #083d87;     /* Deep blue for secondary accents */  --text-light: #FFFFFF;   /* Pure white for better contrast */  --surface-dark: #242424; /* Darker surface color for better contrast */}
-
-* {  margin: 0;  padding: 0;  box-sizing: border-box;}
-
-body {  background: var(--deep-purple);  color: var(--text-light); /* Use pure white text */  font-family: 'Inter', sans-serif;  overflow-x: hidden;}
-
-.parallax-bg {  position: fixed;  top: 0;  left: 0;  width: 100%;  height: 100%;  z-index: -1;  background: linear-gradient(45deg, #083d87, #878094);  transform-style: preserve-3d;  pointer-events: none;}
-
-.scroll-lines {  position: fixed;  top: 0;  left: 0;  width: 100%;  height: 100%;  z-index: -1;  opacity: 0.05;  background:   linear-gradient(90deg, transparent 50%, rgba(220,220,220,0.03) 50%),    linear-gradient(rgba(220,220,220,0.03) 50%, transparent 50%);  background-size: 30px 30px;  transform-style: preserve-3d;  animation: scrollBg 20s linear infinite;}
-
-@keyframes scrollBg {  from { background-position: 0 0; }  to { background-position: 0 30px; }}
-
-.hero {  min-height: 100vh;  display: flex;  align-items: center;  justify-content: center;  position: relative;}
-
-.hero::before {  content: '';  position: absolute;  width: 100%;  height: 100%;  background:   radial-gradient(circle at 50% 50%, rgba(0,0,0,0.3) 0%, #111111 100%),    linear-gradient(45deg, rgba(200,200,200,0.05) 0%, rgba(150,150,150,0.05) 100%);  filter: blur(40px);  z-index: 0;}
-
-.particles-js-canvas-el {  position: absolute;  top: 0;  left: 0;  z-index: 1;  transition: filter 0.3s ease;}
-
-.particles-js-canvas-el:hover {  filter: brightness(1.2) contrast(1.1);}
-
-.neural-particles {  position: absolute;  width: 100%;  height: 100%;  top: 0;  left: 0;  z-index: 1;  cursor: crosshair;}
-
-.particle-trail {  position: absolute;  pointer-events: none;  mix-blend-mode: screen;  z-index: 2;  animation: fadeOut 0.8s ease forwards;}
-
-.content {  z-index: 2;  max-width: 1200px;  padding: 2rem;  text-align: center;  margin: 0 auto; /* Add this to center horizontally */  width: 100%; /* Add this to ensure proper width */  display: flex;  flex-direction: column;  align-items: center; /* Center all content horizontally */  justify-content: center; /* Center content vertically */}
-
-h1 {  font-size: 5rem;  font-weight: 900;  background: linear-gradient(45deg, #87e2df, #ffffff);  -webkit-background-clip: text;  -webkit-text-fill-color: transparent;  position: relative;  text-shadow: 0 0 15px rgba(135,226,223,0.5);}
-
-h1::after {  content: attr(data-text);  position: absolute;  left: 0;  top: 0;  z-index: -1;  filter: blur(8px);  opacity: 0.5;  background: linear-gradient(45deg, #87e2df, #ffffff);  -webkit-background-clip: text;  -webkit-text-fill-color: transparent;}
-
-.tagline {  font-size: 1.5rem;  margin-bottom: 3rem;  opacity: 0;  transform: translateY(20px);  animation: fadeUp 0.8s ease forwards 0.5s;}
-
-.features {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  gap: 2rem;  margin-top: 4rem;  width: 100%;  place-items: center; /* This centers grid items */  justify-content: center;}
-
-.feature-card {  position: relative;  overflow: hidden;  background: rgba(255,255,255,0.05); /* Slightly more opaque for better contrast */  padding: 2rem;  border-radius: 15px;  backdrop-filter: blur(10px);  transform: translateY(50px);  opacity: 0;  animation: fadeUp 0.8s ease forwards;  border: 1px solid rgba(200,200,200,0.1);  box-shadow: 0 4px 12px rgba(0,0,0,0.2);  color: var(--text-light);  text-align: center; /* Ensure text is centered */}
-
-.feature-card h3, .feature-card p {  width: 100%;  text-align: center;  margin-bottom: 1rem;}
-
-.cta-button {  display: inline-block;  padding: 1rem 2.5rem;  margin-top: 3rem;  background: linear-gradient(45deg, #87e2df, #083d87);  border: none;  border-radius: 50px;  color: #FFFFFF; /* White text instead of dark */  text-shadow: 0 1px 2px rgba(0,0,0,0.3);  font-size: 1rem;  font-weight: 600;  letter-spacing: 0.5px;  text-transform: uppercase;  text-decoration: none;  transition: transform 0.3s ease, box-shadow 0.3s ease;  cursor: pointer;  position: relative;  overflow: hidden;  box-shadow: 0 4px 12px rgba(0,0,0,0.2);}
-
-.cta-button::before {  content: '';  position: absolute;  top: -50%;  left: -50%;  width: 200%;  height: 200%;  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);  transform: rotate(45deg);  animation: shimmer 3s linear infinite;}
-
-.cta-button:hover {  transform: translateY(-2px);  box-shadow: 0 6px 16px rgba(0,0,0,0.25);}
-
-@keyframes fadeUp {  to {    opacity: 1;    transform: translateY(0);  }}
-
-@keyframes shimmer {  0% { transform: translateX(-100%) rotate(45deg); }  100% { transform: translateX(100%) rotate(45deg); }}
-
-.floating {  animation: float 3s ease-in-out infinite;}
-
-@keyframes float {  0%, 100% {    transform: translateY(0);  }  50% {    transform: translateY(-20px);  }}
-
-canvas {  image-rendering: -webkit-optimize-contrast;  image-rendering: crisp-edges;}
-
-.particles-js-canvas-el:hover + .content {  transform: scale(1.02);  transition: transform 0.3s ease;}
-
-.section {  position: relative;  z-index: 1;  transform-style: preserve-3d;  will-change: transform;}
-
-.innovation-section {  min-height: 100vh;  background: transparent;  position: relative;  z-index: 1;  overflow: hidden;}
-
-.scroll-grid {  position: relative;  padding: 4rem 2rem;}
-
-.grid-line {  position: absolute;  top: 0;  left: 50%;  height: 100%;  width: 1px;  background: linear-gradient(  to bottom,  transparent,  var(--neon-blue),  transparent);  transform-origin: 50% 0%;  animation: expandLine 2s ease forwards;}
-
-.section-title {  font-size: 3rem;  text-align: center;  margin-bottom: 4rem;  background: linear-gradient(45deg, #87e2df, #ffffff);  -webkit-background-clip: text;  -webkit-text-fill-color: transparent;}
-
-.innovation-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 3rem;  max-width: 1200px;  margin: 0 auto;}
-
-.grid-item {  text-align: center;  padding: 2rem;  background: rgba(255,255,255,0.02);  border-radius: 15px;  backdrop-filter: blur(10px);  border: 1px solid rgba(200,200,200,0.1);  transition: transform 0.3s ease;}
-
-.grid-item:hover {  transform: translateY(-5px);}
-
-.stat-circle {  position: relative;  width: 120px;  height: 120px;  margin: 0 auto 2rem;}
-
-.stat-number {  position: absolute;  top: 50%;  left: 50%;  transform: translate(-50%, -50%);  font-size: 1.5rem;  font-weight: bold;  color: #87e2df; /* Use highlight color instead of neon blue for better contrast */}
-
-.progress-ring-circle {  transition: stroke-dashoffset 1s ease;  transform: rotate(-90deg);  transform-origin: 50% 50%;  stroke-dasharray: 326.726;  stroke-dashoffset: 326.726;}
-
-@keyframes expandLine {  from {    transform: scaleY(0);  }  to {    transform: scaleY(1);  }}
-
-.solutions-section {  min-height: 100vh;  background: transparent;  padding: 6rem 2rem;  position: relative;  z-index: 1;  overflow: hidden;}
-
-.solutions-container {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 3rem;  max-width: 1400px;  margin: 4rem auto 0;}
-
-.solution-card {  background: rgba(255,255,255,0.08); /* More opaque background */  border: 1px solid rgba(200,200,200,0.1);  border-radius: 20px;  padding: 2.5rem;  transition: all 0.4s ease;  position: relative;  overflow: hidden;  backdrop-filter: blur(10px);  color: var(--text-light);}
-
-.solution-card:hover {  transform: translateY(-10px);  background: rgba(255,255,255,0.1);  border-color: rgba(200,200,200,0.2);}
-
-.solution-icon {  color: var(--neon-blue);  margin-bottom: 1.5rem;  position: relative;  z-index: 1;}
-
-.solution-card h3 {  color: #fff;  font-size: 1.5rem;  margin-bottom: 1rem;}
-
-.solution-card p {  color: rgba(255,255,255,0.7);  line-height: 1.6;  margin-bottom: 2rem;}
-
-.progress-bar {  height: 4px;  background: rgba(255,255,255,0.1);  border-radius: 2px;  overflow: hidden;}
-
-.progress {  height: 100%;  background: linear-gradient(90deg, #87e2df, #083d87);  width: 0;  transition: width 1.5s ease;}
-
-.solution-card:hover .progress {  width: 100%;}
-
-.case-studies-section {  min-height: 100vh;  background: transparent;  padding: 8rem 2rem;  position: relative;  z-index: 1;  overflow: hidden;}
-
-.case-studies-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));  gap: 3rem;  max-width: 1400px;  margin: 4rem auto 0;}
-
-.case-study-card {  background: rgba(255,255,255,0.02);  border: 1px solid rgba(200,200,200,0.1);  border-radius: 20px;  padding: 2.5rem;  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);  position: relative;  overflow: hidden;  backdrop-filter: blur(10px);}
-
-.case-study-card:hover {  transform: translateY(-10px);  background: rgba(255,255,255,0.05);  border-color: rgba(200,200,200,0.2);}
-
-.case-study-image {  position: relative;  height: 200px;  margin-bottom: 2rem;}
-
-.case-study-blob {  position: absolute;  width: 100%;  height: 100%;  opacity: 0.1;  transition: all 0.5s ease;}
-
-.case-study-card:hover .case-study-blob {  transform: scale(1.1) rotate(10deg);  opacity: 0.2;}
-
-.study-number {  position: absolute;  top: 50%;  left: 50%;  transform: translate(-50%, -50%);  font-size: 4rem;  font-weight: 900;  color: rgba(255,255,255,0.1);  transition: all 0.5s;}
-
-.case-study-card:hover .study-number {  transform: translate(-50%, -50%) scale(1.2);  color: rgba(255,255,255,0.2);}
-
-.metrics {  display: grid;  grid-template-columns: 1fr 1fr;  gap: 1.5rem;  margin-top: 2rem;  padding-top: 2rem;  border-top: 1px solid rgba(255,255,255,0.1);}
-
-.metric {  display: flex;  flex-direction: column;  align-items: center;}
-
-.metric-value {  font-size: 2rem;  font-weight: 700;  color: #87e2df; /* Use highlight color instead of neon blue for better contrast */  margin-bottom: 0.5rem;}
-
-.metric-label {  font-size: 0.9rem;  color: rgba(255,255,255,0.6);}
-
-.timeline-section {  min-height: 100vh;  padding: 8rem 2rem;  position: relative;  overflow: hidden;}
-
-.timeline-container {  max-width: 1200px;  margin: 4rem auto;  position: relative;  padding: 2rem 0;}
-
-.timeline-track {  position: absolute;  top: 0;  left: 50%;  width: 2px;  height: 100%;  background: linear-gradient(to bottom,    transparent,    #87e2df,    #083d87,    transparent);  transform: translateX(-50%);}
-
-.timeline-item {  position: relative;  margin: 6rem 0;  width: 100%;  display: flex;  justify-content: center;}
-
-.timeline-content {  width: 400px;  background: rgba(255,255,255,0.02);  border: 1px solid rgba(200,200,200,0.1);  border-radius: 15px;  padding: 2rem;  position: relative;  backdrop-filter: blur(10px);  transform: translateY(50px);  opacity: 0;  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);}
-
-.timeline-content::before {  content: '';  position: absolute;  top: 50%;  width: 20px;  height: 20px;  background: var(--neon-blue);  border-radius: 50%;  transform: translateY(-50%);}
-
-.timeline-item:nth-child(odd) .timeline-content {  margin-right: calc(50% + 30px);}
-
-.timeline-item:nth-child(even) .timeline-content {  margin-left: calc(50% + 30px);}
-
-.timeline-item:nth-child(odd) .timeline-content::before {  right: -40px;}
-
-.timeline-item:nth-child(even) .timeline-content::before {  left: -40px;}
-
-.timeline-date {  font-size: 1.5rem;  font-weight: 700;  color: #87e2df; /* Use highlight color instead of neon blue */  margin-bottom: 1rem;}
-
-.timeline-stats {  display: grid;  grid-template-columns: 1fr 1fr;  gap: 1rem;  margin-top: 1.5rem;  padding-top: 1.5rem;  border-top: 1px solid rgba(255,255,255,0.1);}
-
-.stat-value {  font-size: 1.5rem;  font-weight: 700;  color: #87e2df; /* Use highlight color instead of neon blue */}
-
-.stat-label {  font-size: 0.9rem;  color: rgba(255,255,255,0.6);}
-
-.cta-section {  min-height: 100vh;  padding: 8rem 2rem;  position: relative;  overflow: hidden;  display: flex;  flex-direction: column;  align-items: center;  justify-content: center;}
-
-.neural-grid-overlay {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background-image:   linear-gradient(rgba(220,220,220,0.03) 1px, transparent 1px),    linear-gradient(90deg, rgba(220,220,220,0.03) 1px, transparent 1px);  background-size: 20px 20px;  pointer-events: none;}
-
-.cta-container {  max-width: 600px;  width: 100%;  margin: 4rem auto;  position: relative;}
-
-.neural-form {  background: rgba(255,255,255,0.02);  padding: 3rem;  border-radius: 20px;  backdrop-filter: blur(10px);  border: 1px solid rgba(200,200,200,0.1);  transform-style: preserve-3d;  perspective: 1000px;}
-
-.input-wrapper {  position: relative;  margin-bottom: 2rem;}
-
-.neural-form input {  width: 100%;  padding: 1rem;  background: rgba(255,255,255,0.08);  border: 1px solid rgba(200,200,200,0.2);  border-radius: 8px;  color: var(--text-light);  font-size: 1rem;  transition: all 0.3s ease;}
-
-.neural-form input:focus {  outline: none;  border-color: var(--neon-blue);  background: rgba(255,255,255,0.05);}
-
-.neural-form label {  position: absolute;  left: 1rem;  top: 50%;  transform: translateY(-50%);  color: rgba(255,255,255,0.6);  transition: all 0.3s ease;  pointer-events: none;}
-
-.neural-form input:focus ~ label, .neural-form input:not(:placeholder-shown) ~ label {  top: -0.5rem;  left: 0.5rem;  font-size: 0.8rem;  color: var(--neon-blue);  background: var(--deep-purple);  padding: 0 0.5rem;}
-
-.input-focus-effect {  position: absolute;  bottom: 0;  left: 50%;  width: 0;  height: 2px;  background: linear-gradient(90deg, #c0c0c0, #ffffff);  transition: all 0.3s ease;  transform: translateX(-50%);}
-
-.neural-form input:focus ~ .input-focus-effect {  width: 100%;}
-
-.submit-container {  margin-top: 3rem;  text-align: center;}
-
-.neural-submit {  position: relative;  padding: 1rem 3rem;  background: transparent;  border: none;  color: var(--text-light);  font-size: 1.1rem;  font-weight: 600;  cursor: pointer;  overflow: hidden;  transition: all 0.3s ease;}
-
-.button-effects {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;}
-
-.effect-1, .effect-2, .effect-3 {  position: absolute;  border-radius: inherit;}
-
-.effect-1 {  inset: 0;  background: linear-gradient(45deg, #87e2df, #083d87);  opacity: 0.8;}
-
-.effect-2 {  inset: 2px;  background: #111111;}
-
-.effect-3 {  inset: 3px;  background: linear-gradient(45deg, #87e2df, #083d87);  opacity: 0;  transition: opacity 0.3s ease;}
-
-.neural-submit:hover .effect-3 {  opacity: 0.2;}
-
-.button-text {  position: relative;  z-index: 1;}
-
-.neural-form:focus-within {  transform: translateZ(20px);  box-shadow: 0 20px 40px rgba(0,0,0,0.2);}
-
-.hybrid-showcase-section {  min-height: 100vh;  padding: 8rem 2rem;  position: relative;  background: linear-gradient(180deg, #111111, #1a1a1a);}
-
-.hybrid-showcase-container {  max-width: 1400px;  margin: 0 auto;}
-
-.showcase-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 3rem;  margin-top: 4rem;}
-
-.showcase-item {  position: relative;  background: rgba(255,255,255,0.02);  border-radius: 20px;  padding: 2rem;  backdrop-filter: blur(10px);  border: 1px solid rgba(200,200,200,0.1);  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);}
-
-.showcase-item:hover {  transform: translateY(-10px);  border-color: var(--neon-blue);}
-
-.media-wrapper {  position: relative;  aspect-ratio: 16/9;  margin-bottom: 2rem;  overflow: hidden;  border-radius: 12px;  background: rgba(0,0,0,0.2);}
-
-.glitch-overlay {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  pointer-events: none;  mix-blend-mode: screen;}
-
-.audio-controls {  position: absolute;  bottom: 0;  left: 0;  width: 100%;  padding: 1rem;  background: linear-gradient(transparent, rgba(0,0,0,0.8));}
-
-.play-btn {  background: none;  border: none;  color: var(--text-light);  cursor: pointer;  padding: 0.5rem;  border-radius: 50%;  transition: transform 0.3s ease;}
-
-.play-btn:hover {  transform: scale(1.1);}
-
-.audio-progress {  display: flex;  align-items: center;  gap: 1rem;  margin-top: 0.5rem;}
-
-.interaction-overlay {  position: absolute;  inset: 0;  cursor: crosshair;}
-
-canvas {  width: 100%;  height: 100%;  object-fit: cover;}
-
-.insights-section {  min-height: 100vh;  padding: 8rem 2rem;  position: relative;  background: linear-gradient(180deg, var(--surface-dark), var(--deep-purple));}
-
-.neural-insights-container {  max-width: 1400px;  margin: 0 auto;  position: relative;}
-
-.neural-pulse {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: radial-gradient(circle at center, rgba(135,226,223,0.1) 0%, transparent 70%);  animation: pulse 4s ease-in-out infinite;}
-
-@keyframes pulse {  0%, 100% { transform: scale(1); opacity: 0.5; }  50% { transform: scale(1.2); opacity: 0.2; }}
-
-.insight-nodes {  display: flex;  flex-wrap: wrap;  gap: 2rem;  justify-content: center;  perspective: 1000px;}
-
-.insight-node {  background: rgba(255,255,255,0.03);  border: 1px solid rgba(200,200,200,0.1);  border-radius: 15px;  padding: 2rem;  width: 300px;  backdrop-filter: blur(10px);  transform-style: preserve-3d;  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);}
-
-.insight-node:hover {  transform: translateZ(30px) rotateX(5deg) rotateY(5deg);}
-
-.insight-type {  font-size: 0.9rem;  color: var(--neon-blue);  text-transform: uppercase;  letter-spacing: 1px;  margin-bottom: 1rem;}
-
-.insight-content {  position: relative;  padding-left: 1rem;  border-left: 2px solid var(--highlight);}
-
-.confidence-meter {  height: 4px;  background: rgba(255,255,255,0.1);  border-radius: 2px;  margin-top: 1rem;  overflow: hidden;}
-
-.confidence-level {  height: 100%;  background: linear-gradient(90deg, #87e2df, #083d87);  transform-origin: left;  animation: fillWidth 1.5s ease forwards;}
-
-@keyframes fillWidth {  from { transform: scaleX(0); }  to { transform: scaleX(var(--scale)); }}
-
-.neural-connections {  position: absolute;  inset: 0;  pointer-events: none;  z-index: 0;}
-
-.innovation-lab-section {  min-height: 100vh;  background: linear-gradient(135deg, var(--deep-purple), var(--surface-dark));  padding: 6rem 2rem;}
-
-.lab-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 2rem;  position: relative;  z-index: 2;  max-width: 1400px;  margin: 0 auto;  justify-items: center; /* Centers items horizontally within the grid */  align-items: start;    /* Aligns items to the top */}
-
-.lab-card {  background: rgba(255,255,255,0.08); /* Consistent background across all cards */  border: 1px solid rgba(200,200,200,0.1);  border-radius: 20px;  padding: 2rem;  position: relative;  overflow: hidden;  backdrop-filter: blur(10px);  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);  color: var(--text-light);}
-
-.lab-card:hover {  transform: translateY(-5px) scale(1.02);  border-color: #87e2df;  box-shadow: 0 10px 30px rgba(0,0,0,0.2);}
-
-.lab-card::before {  content: '';  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03));  opacity: 0;  transition: opacity 0.3s ease;}
-
-.lab-card:hover::before {  opacity: 1;}
-
-.experiment-visual {  height: 200px;  margin: -2rem -2rem 2rem;  background: rgba(0,0,0,0.2);  position: relative;  overflow: hidden;}
-
-.data-stream {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background:   linear-gradient(90deg,    transparent 50%,    rgba(135,226,223,0.05) 50%    );  background-size: 4px 100%;  animation: dataFlow 20s linear infinite;}
-
-@keyframes dataFlow {  from { transform: translateX(0); }  to { transform: translateX(-4px); }}
-
-.metric-ring {  position: absolute;  top: 50%;  left: 50%;  transform: translate(-50%, -50%);}
-
-.pulse-ring {  stroke: var(--neon-blue);  stroke-width: 2;  fill: none;  r: 20;  transform-origin: center;  animation: pulse 2s ease-out infinite;}
-
-@keyframes pulse {  0% { r: 20; stroke-opacity: 1; }  100% { r: 40; stroke-opacity: 0; }}
-
-.scrolling-cta {  position: relative;  padding: 6rem 2rem;  background: var(--deep-purple);  overflow: hidden;  color: var(--text-light);}
-
-.cta-container {  max-width: 800px;  margin: 0 auto;  position: relative;  z-index: 2;}
-
-.cta-content {  text-align: center;  display: flex;  flex-direction: column;  align-items: center;  gap: 2rem;}
-
-.cta-icon {  width: 120px;  height: 120px;  margin-bottom: 2rem;}
-
-.network-icon {  width: 100%;  height: 100%;  color: var(--highlight);}
-
-.node {  animation: pulseNode 3s ease-in-out infinite;}
-
-.node-1 { animation-delay: 0s; } 
-.node-2 { animation-delay: 0.5s; } 
-.node-3 { animation-delay: 1s; } 
-.node-4 { animation-delay: 1.5s; }
-
-.connection-path {  opacity: 0.8;  animation: glowPath 2s ease-in-out infinite;}
-
-.neural-path {  opacity: 0.6;  animation: flowPath 3s linear infinite;}
-
-@keyframes pulseNode {  0%, 100% { opacity: 0.6; transform: scale(1); }  50% { opacity: 1; transform: scale(1.1); } }
-
-@keyframes glowPath {  0%, 100% { opacity: 0.6; }  50% { opacity: 1; } }
-
-@keyframes flowPath {  0% { stroke-dashoffset: 1000; }  100% { stroke-dashoffset: 0; } }
-
-.cta-content h2 {  font-size: 3rem;  background: linear-gradient(45deg, var(--highlight), #ffffff);  -webkit-background-clip: text;  -webkit-text-fill-color: transparent;  margin-bottom: 1rem;}
-
-.cta-content p {  font-size: 1.25rem;  color: rgba(255, 255, 255, 0.8);  margin-bottom: 2rem;}
-
-.follow-link {  display: flex;  align-items: center;  gap: 1rem;  padding: 1rem 2.5rem;  background: linear-gradient(45deg, var(--highlight), var(--neon-blue));  border: none;  border-radius: 50px;  color: var(--text-light);  font-size: 1.2rem;  font-weight: 600;  text-decoration: none;  transition: all 0.3s ease;}
-
-.follow-link:hover {  transform: translateY(-2px);  box-shadow: 0 8px 20px rgba(0,0,0,0.3);}
-
-.arrow-icon {  width: 24px;  height: 24px;  stroke-width: 2;  transition: transform 0.3s ease;}
-
-.follow-link:hover .arrow-icon {  transform: translateX(5px);}
-
-@media (max-width: 768px) {  .cta-content h2 {    font-size: 2rem;  }   .cta-content p {    font-size: 1rem;  }   .follow-link {    font-size: 1rem;    padding: 0.8rem 1.6rem;  }}
-
-</style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&amp;display=swap" rel="stylesheet"><script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script></head><body>
-
-<div class="parallax-bg"></div>
-<div class="scroll-lines"></div>
-
-<div class="hero section">
-  <div class="neural-particles" id="particles"></div>
-  
-  <svg class="neural-grid" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-        <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(74,144,226,0.2)" stroke-width="1"></path>
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#grid)"></rect>
-  </svg>
-
-  <div class="content" style="text-align: center; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; max-width: 1200px; padding: 2rem;">
-    <h1 class="floating" data-text="TeachOneself">TeachOneself</h1>
-    <p class="tagline">Your Journey to Mastery Through Self-Directed Learning</p>
-    
-    <div class="features">
-      <div class="feature-card">
-        <h3>Zachary Bennett</h3>
-        <p>I'm a lifelong learner interested in marketing, cognitive science, writing, programming, and more!</p>
-      </div>
-      
-      <div class="feature-card">
-        <h3>What's this site?</h3>
-        <p>Explore who I am, what I offer, and everything I do to promote self-learning.</p>
-      </div>
-      
-      <div class="feature-card">
-        <h3>Self-Learning</h3>
-        <p>I believe every child should be given the tools and perspective to understand how vital it is to become a self-learning powerhouse.</p>
-      </div>
-    </div>
-
-    <a href="https://github.com/neural-nexus/framework" class="cta-button">Explore Framework</a>
-</div>
-</div>
-
-<div class="innovation-section section">
-  <div class="scroll-grid">
-    <div class="grid-line"></div>
-    <div class="grid-content">
-      <h2 class="section-title">Transformative Technology</h2>
-      <div class="innovation-grid">
-        <div class="grid-item" data-aos="fade-up">
-          <div class="stat-circle">
-            <span class="stat-number">10k+</span>
-          </div>
-          <h3>Active Learners</h3>
-          <p>Building skills through self-directed learning</p>
-        </div>
-        
-        <div class="grid-item" data-aos="fade-up" data-aos-delay="100">
-          <div class="stat-circle">
-            <span class="stat-number">500+</span>
-          </div>
-          <h3>Learning Paths</h3>
-          <p>Curated curriculum guides across disciplines</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="solutions-section section">
-  <div class="solutions-grid">
-    <h2 class="section-title">Intelligent Solutions</h2>
-    
-    <div class="solutions-container">
-      <div class="solution-card">
-        <h3>Learning Science</h3>
-        <p>Research-backed approaches to metacognition and skill acquisition</p>
-      </div>
-
-      <div class="solution-card">
-        <h3>Community Platform</h3>
-        <p>Tools for collaboration, accountability, and peer learning</p>
-      </div>
-
-      <div class="solution-card">
-        <h3>Resource Library</h3>
-        <p>Curated collection of learning materials, tools, and frameworks</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="case-studies-section section">
-  <div class="case-studies-container">
-    <h2 class="section-title">Success Stories</h2>
-    
-    <div class="case-studies-grid">
-      <div class="case-study-card">
-        <h3>Career Transitions</h3>
-        <p>How self-learners successfully switched industries</p>
-        <div class="metrics">
-          <div class="metric">
-            <span class="metric-value">94%</span>
-            <span class="metric-label">Success Rate</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="timeline-section section">
-  <h2 class="section-title">Evolution &amp; Milestones</h2>
-  
-  <div class="timeline-container">
-    <div class="timeline-track"></div>
-    
-    <div class="timeline-item" data-year="2023">
-      <div class="timeline-content">
-        <div class="timeline-date">2023</div>
-        <h3>Learning Science Research</h3>
-        <p>Published findings on accelerated skill acquisition</p>
-      </div>
-    </div>
-
-    <div class="timeline-item" data-year="2022">
-      <div class="timeline-content">
-        <div class="timeline-date">2022</div>
-        <h3>Community Platform Launch</h3>
-        <p>Built and scaled learning community to 10,000+ members</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="cta-section section">
-  <div class="neural-grid-overlay"></div>
-  <h2 class="section-title">Join the Learning Revolution</h2>
-  
-  <div class="cta-container">
-    <form id="neural-form" class="neural-form">
-      <div class="input-wrapper">
-        <input type="email" id="email" required="" placeholder="Your Email">
-        <div class="input-focus-effect"></div>
-      </div>
-
-      <div class="input-wrapper">
-        <input type="text" id="goals" required="" placeholder="Learning Goals">
-        <div class="input-focus-effect"></div>
-      </div>
-
-      <div class="submit-container">
-        <button type="submit" class="neural-submit">
-          <span class="button-text">Start Your Journey</span>
-          <div class="button-effects">
-            <div class="effect-1"></div>
-            <div class="effect-2"></div>
-            <div class="effect-3"></div>
-          </div>
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<div class="insights-section section">
-  <div class="neural-insights-container">
-    <h2 class="section-title">Neural Insights</h2>
-    <div class="neural-pulse">
-      <svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="none">
-        <defs>
-          <radialGradient id="pulseGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-            <stop offset="0%" style="stop-color:var(--neon-blue);stop-opacity:0.1"></stop>
-            <stop offset="50%" style="stop-color:var(--neon-blue);stop-opacity:0.05"></stop>
-            <stop offset="100%" style="stop-color:var(--neon-blue);stop-opacity:0"></stop>
-          </radialGradient>
-          
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"></feGaussianBlur>
-            <feMerge>
-              <feMergeNode in="coloredBlur"></feMergeNode>
-              <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-          </filter>
-        </defs>
-
-        <circle class="pulse-circle" cx="50" cy="50" r="5" fill="none" stroke="url(#pulseGradient)">
-          <animate attributeName="r" from="5" to="50" dur="3s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" from="0.6" to="0" dur="3s" repeatCount="indefinite"></animate>
-        </circle>
-
-        <circle class="pulse-circle" cx="50" cy="50" r="5" fill="none" stroke="url(#pulseGradient)">
-          <animate attributeName="r" from="5" to="50" dur="3s" begin="1s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" from="0.6" to="0" dur="3s" begin="1s" repeatCount="indefinite"></animate>
-        </circle>
-
-        <circle class="pulse-circle" cx="50" cy="50" r="5" fill="none" stroke="url(#pulseGradient)">
-          <animate attributeName="r" from="5" to="50" dur="3s" begin="2s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" from="0.6" to="0" dur="3s" begin="2s" repeatCount="indefinite"></animate>
-        </circle>
-
-        <g class="neural-nodes" filter="url(#glow)">
-          <circle cx="20" cy="30" r="2" fill="#c0c0c0">
-            <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"></animate>
-          </circle>
-          <circle cx="80" cy="70" r="2" fill="#c0c0c0">
-            <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"></animate>
-          </circle>
-          <circle cx="60" cy="20" r="2" fill="#c0c0c0">
-            <animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"></animate>
-          </circle>
-          <circle cx="40" cy="80" r="2" fill="#c0c0c0">
-            <animate attributeName="opacity" values="0.3;1;0.3" dur="2.2s" repeatCount="indefinite"></animate>
-          </circle>
-        </g>
-
-        <g class="neural-connections" stroke="#c0c0c0" stroke-width="0.5" opacity="0.3">
-          <line x1="20" y1="30" x2="60" y2="20">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="3s" repeatCount="indefinite"></animate>
-          </line>
-          <line x1="60" y1="20" x2="80" y2="70">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.5s" repeatCount="indefinite"></animate>
-          </line>
-          <line x1="80" y1="70" x2="40" y2="80">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.8s" repeatCount="indefinite"></animate>
-          </line>
-          <line x1="40" y1="80" x2="20" y2="30">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.2s" repeatCount="indefinite"></animate>
-          </line>
-        </g>
-
-        <circle cx="50" cy="50" r="3" fill="#FFA45C" filter="url(#glow)">
-          <animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"></animate>
-        </circle>
-      </svg>
-    </div>
-    <canvas class="neural-connections" id="connectionsCanvas"></canvas>
-    
-    <div class="insight-nodes">
-      <div class="insight-node">
-        <div class="insight-type">Learning Research</div>
-        <p>"Metacognition and spaced repetition are key drivers of successful self-directed learning"</p>
-      </div>
-      
-      <div class="insight-node">
-        <div class="insight-type">Community Impact</div>
-        <p>"Peer learning groups show 3x better retention rates than solo learners"</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="innovation-lab-section">
-  <h2 class="section-title">Innovation Lab</h2>
-  
-  <div class="lab-grid">
-    <div class="lab-card">
-      <div class="experiment-visual">
-        <div class="data-stream"></div>
-        <svg class="metric-ring" width="100" height="100" viewBox="0 0 100 100">
-          <circle class="pulse-ring" cx="50" cy="50"></circle>
-          <circle class="pulse-ring" cx="50" cy="50" style="animation-delay: 0.5s"></circle>
-          <circle class="pulse-ring" cx="50" cy="50" style="animation-delay: 1s"></circle>
-        </svg>
-      </div>
-      <h3>Neural Network Training</h3>
-      <p>Real-time visualization of learning patterns and knowledge acquisition in self-directed learners.</p>
-    </div>
-
-    <div class="lab-card">
-      <div class="experiment-visual">
-        <div class="data-stream"></div>
-        <canvas id="skillGraph" width="300" height="200"></canvas>
-      </div>
-      <h3>Skill Development Analysis</h3>
-      <p>Advanced metrics tracking learning velocity and knowledge retention across different domains.</p>
-    </div>
-
-    <div class="lab-card">
-      <div class="experiment-visual">
-        <div class="data-stream"></div>
-        <div id="learningPatterns"></div>
-      </div>
-      <h3>Learning Pattern Recognition</h3>
-      <p>AI-powered analysis of successful learning strategies and methodologies.</p>
-    </div>
-  </div>
-</div>
-
-<section class="scrolling-cta">
-  <div class="cta-container">
-    <div class="cta-content">
-      <div class="cta-icon">
-        <svg class="network-icon" viewBox="0 0 969 955" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle class="node node-1" cx="161.191" cy="320.191" r="133.191" stroke="currentColor" stroke-width="20"></circle>
-          <circle class="node node-2" cx="806.809" cy="320.191" r="133.191" stroke="currentColor" stroke-width="20"></circle>
-          <circle class="node node-3" cx="695.019" cy="587.733" r="31.4016" fill="currentColor"></circle>
-          <circle class="node node-4" cx="272.981" cy="587.733" r="31.4016" fill="currentColor"></circle>
-          <path class="connection-path" d="M564.388 712.083C564.388 743.994 526.035 779.911 483.372 779.911C440.709 779.911 402.356 743.994 402.356 712.083C402.356 680.173 440.709 664.353 483.372 664.353C526.035 664.353 564.388 680.173 564.388 712.083Z" fill="currentColor"></path>
-          <path class="neural-path" fill-rule="evenodd" clip-rule="evenodd" d="M745.643 288.24C815.368 344.185 854.539 432.623 854.539 511.741H614.938V454.652C614.938 433.113 597.477 415.652 575.938 415.652H388.37C366.831 415.652 349.37 433.113 349.37 454.652V511.741L110.949 511.741C110.949 432.623 150.12 344.185 219.845 288.24C289.57 232.295 384.138 200.865 482.744 200.865C581.35 200.865 675.918 232.295 745.643 288.24Z" fill="currentColor"></path>
-        </svg>
-      </div>
-      <h2>Ready to Transform Your Learning Journey?</h2>
-      <p>Join our community and start mastering new skills today!</p>
-      <a href="https://example.com/join" class="follow-link">
-        <span>Get Started</span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="arrow-icon">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-        </svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  particlesJS('particles', {
-    particles: {
-      number: {
-        value: 60,
-        density: {
-          enable: true,
-          value_area: 1500
-        }
-      },
-      color: {
-        value: ['#87e2df', '#083d87', '#878094']
-      },
-      opacity: {
-        value: 0.3,
-        random: true
-      },
-      size: {
-        value: 1.5,
-        random: true
-      },
-      line_linked: {
-        enable: true,
-        distance: 150,
-        color: '#87e2df',
-        opacity: 0.2,
-        width: 0.8
-      },
-      move: {
-        enable: true,
-        speed: 2,
-        direction: 'none',
-        random: false,
-        straight: false,
-        out_mode: 'bounce',
-        bounce: true,
-        attract: {
-          enable: true,
-          rotateX: 600,
-          rotateY: 1200
-        }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeachOneself</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1f2937;
+      color: #f3f4f6;
+      overflow-x: hidden;
+    }
+
+    /* Navbar Styles */
+    nav {
+      background-color: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    nav .nav-links a {
+      color: #f3f4f6;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      transition: color 0.3s ease-in-out;
+    }
+
+    nav .nav-links a:hover {
+      color: #60a5fa;
+    }
+
+    /* Hero Section Styles */
+    #hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero .hero-content {
+      max-width: 800px;
+      z-index: 1;
+    }
+
+    #hero h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #60a5fa, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    #hero p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    #hero .arrow-down {
+      animation: bounce 1s infinite;
+      z-index: 1;
+    }
+
+    #hero .background-blur {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, rgba(96, 165, 250, 0.1), rgba(168, 85, 247, 0.1));
+      filter: blur(100px);
+      z-index: 0;
+    }
+
+    /* Sections Styles */
+    section {
+      padding: 8rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    section h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    .section-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-card, .research-card {
+      background-color: #374151;
+      border-radius: 0.5rem;
+      padding: 2rem;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .tool-card:hover, .research-card:hover {
+      transform: translateY(-0.5rem);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .philosophy-content, .book-content {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .philosophy-text, .book-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .join-waitlist {
+      background-color: #60a5fa;
+      color: #f3f4f6;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .join-waitlist:hover {
+      background-color: #3b82f6;
+    }
+
+    /* Footer Styles */
+    footer {
+      background-color: #111827;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    /* Animations */
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
       }
-    },
-    interactivity: {
-      detect_on: 'canvas',
-      events: {
-        onhover: {
-          enable: true,
-          mode: ['grab', 'bubble']
-        },
-        onclick: {
-          enable: true,
-          mode: 'push'
-        },
-        resize: true
-      },
-      modes: {
-        grab: {
-          distance: 200,
-          line_linked: {
-            opacity: 0.8
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      // Initialize GSAP and ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Hero section parallax
+      gsap.to('#hero .hero-content', {
+        y: '20%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top',
+          end: 'bottom',
+          scrub: true
+        }
+      });
+
+      // Fade in sections
+      gsap.utils.toArray('section').forEach(section => {
+        gsap.from(section, {
+          y: 50,
+          opacity: 0,
+          duration: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            end: 'bottom 20%',
+            toggleActions: 'play none none reverse'
           }
-        },
-        bubble: {
-          distance: 200,
-          size: 6,
-          duration: 0.3,
-          opacity: 0.8,
-          speed: 3
-        },
-        push: {
-          particles_nb: 4
-        }
-      }
-    },
-    retina_detect: true,
-    fps_limit: 60
-  });
-
-  const particlesContainer = document.querySelector('.neural-particles');
-  const canvas = document.querySelector('.particles-js-canvas-el');
-  
-  const createShockwave = (x, y) => {
-    const shockwave = document.createElement('div');
-    shockwave.style.cssText = `
-      position: absolute;
-      left: ${x}px;
-      top: ${y}px;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-      background: transparent;
-      border: 2px solid var(--neon-blue);
-      transform: translate(-50%, -50%);
-      animation: shockwave 1s ease-out forwards;
-    `;
-    particlesContainer.appendChild(shockwave);
-    setTimeout(() => shockwave.remove(), 1000);
-  };
-
-  const createEnergySpark = (x, y) => {
-    const spark = document.createElement('div');
-    const angle = Math.random() * Math.PI * 2;
-    const distance = Math.random() * 100 + 50;
-    spark.style.cssText = `
-      position: absolute;
-      left: ${x}px;
-      top: ${y}px;
-      width: 2px;
-      height: 10px;
-      background: var(--highlight);
-      transform: translate(-50%, -50%) rotate(${angle}rad);
-      filter: blur(1px);
-      animation: spark 0.6s ease-out forwards;
-    `;
-    particlesContainer.appendChild(spark);
-    setTimeout(() => spark.remove(), 600);
-  };
-
-  particlesContainer.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const trail = document.createElement('div');
-    trail.className = 'particle-trail';
-    trail.style.left = x + 'px';
-    trail.style.top = y + 'px';
-    trail.style.width = '10px';
-    trail.style.height = '10px';
-    trail.style.background = `radial-gradient(circle at center, 
-      var(--neon-blue) 0%, 
-      transparent 70%)`;
-    particlesContainer.appendChild(trail);
-
-    setTimeout(() => {
-      trail.style.transition = 'all 0.5s ease';
-      trail.style.opacity = '0';
-      trail.style.transform = 'scale(2)';
-      setTimeout(() => trail.remove(), 500);
-    }, 10);
-
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(124, 92, 191, 0.3)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(74, 144, 226, 0.5)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  });
-
-  particlesContainer.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    createShockwave(x, y);
-
-    for (let i = 0; i < 12; i++) {
-      setTimeout(() => createEnergySpark(x, y), i * 50);
-    }
-    
-    for (let i = 0; i < 12; i++) {
-      const angle = (i / 12) * Math.PI * 2;
-      const particle = document.createElement('div');
-      particle.className = 'particle-trail';
-      particle.style.cssText = `
-        left: ${x}px;
-        top: ${y}px;
-        width: 5px;
-        height: 5px;
-        position: absolute;
-        background: radial-gradient(circle at center, 
-          ${i % 2 ? 'var(--highlight)' : 'var(--neon-blue)'} 0%, 
-          transparent 70%);
-        filter: blur(1px);
-      `;
-      particlesContainer.appendChild(particle);
-
-      requestAnimationFrame(() => {
-        particle.style.transition = 'all 1s cubic-bezier(0.4, 0, 0.2, 1)';
-        particle.style.transform = `translate(
-          ${Math.cos(angle) * 150}px,
-          ${Math.sin(angle) * 150}px
-        ) scale(0)`;
-        particle.style.opacity = '0';
+        });
       });
 
-      setTimeout(() => particle.remove(), 1000);
-    }
-  });
+      // Hover effects for tool and research cards
+      gsap.utils.toArray('.tool-card, .research-card').forEach(card => {
+        gsap.from(card, {
+          y: 20,
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 80%',
+            end: 'bottom 20%',
+            toggleActions: 'play none none reverse'
+          }
+        });
 
-  document.addEventListener('mousemove', (e) => {
-    const cursor = e.target.closest('.feature-card');
-    if (cursor) {
-      const rect = cursor.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      cursor.style.background = `
-        radial-gradient(
-          circle at ${x}px ${y}px,
-          rgba(255,255,255,0.1),
-          rgba(255,255,255,0.05) 40%
-        )
-      `;
-    }
-  });
-  
-  const rings = document.querySelectorAll('.progress-ring-circle');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.strokeDashoffset = '0';
-      }
-    });
-  });
-  
-  rings.forEach(ring => observer.observe(ring));
-  
-  const gridItems = document.querySelectorAll('.grid-item');
-  const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  });
-  
-  gridItems.forEach(item => {
-    item.style.opacity = '0';
-    item.style.transform = 'translateY(50px)';
-    fadeObserver.observe(item);
-  });
+        card.addEventListener('mouseenter', () => {
+          gsap.to(card, { y: -10, duration: 0.3 });
+        });
 
-  const solutionCards = document.querySelectorAll('.solution-card');
-  const solutionObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }, index * 200);
-      }
-    });
-  }, {
-    threshold: 0.2
-  });
-
-  solutionCards.forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(50px)';
-    solutionObserver.observe(card);
-  });
-
-  const timelineItems = document.querySelectorAll('.timeline-content');
-  const timelineObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.transform = 'translateY(0)';
-        entry.target.style.opacity = '1';
-      }
-    });
-  }, {
-    threshold: 0.2
-  });
-
-  timelineItems.forEach(item => timelineObserver.observe(item));
-
-  window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    document.querySelector('.parallax-bg').style.transform = 
-      `translateY(${scrolled * 0.5}px)`;
-    
-    document.querySelectorAll('.section').forEach(section => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        section.style.transform = `translateY(${progress * 30}px)`;
-      }
-    });
-  });
-
-  const overlay = document.querySelector('.interaction-overlay');
-  if (overlay) {
-    overlay.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      neurons.forEach(neuron => {
-        const dx = x - neuron.x;
-        const dy = y - neuron.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if(dist < 100) {
-          neuron.activity = Math.max(neuron.activity, 1 - dist/100);
-        }
+        card.addEventListener('mouseleave', () => {
+          gsap.to(card, { y: 0, duration: 0.3 });
+        });
       });
     });
-  }
+  </script>
+</head>
+<body>
+  <nav>
+    <div class="logo">TeachOneself</div>
+    <div class="nav-links">
+      <a href="#tools">Tools</a>
+      <a href="#philosophy">Philosophy</a>
+      <a href="#research">Research</a>
+      <a href="#book">Book</a>
+    </div>
+  </nav>
 
-  document.querySelectorAll('.lab-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      card.style.background = `
-        radial-gradient(
-          circle at ${x}px ${y}px,
-          rgba(255,255,255,0.1),
-          rgba(255,255,255,0.03) 40%
-        )
-      `;
-    });
-    
-    card.addEventListener('mouseleave', () => {
-      card.style.background = 'rgba(255,255,255,0.03)';
-    });
-  });
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Learn. Grow. Share.</h1>
+      <p>Welcome to my digital garden of knowledge and tools for self-directed learning.</p>
+      <div class="arrow-down">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
+      </div>
+    </div>
+    <div class="background-blur"></div>
+  </section>
 
-  const skillGraph = document.getElementById('skillGraph');
-  if (skillGraph) {
-    const ctx = skillGraph.getContext('2d');
-    ctx.strokeStyle = '#87e2df';
-    ctx.lineWidth = 2;
-    
-    function animateGraph() {
-      ctx.clearRect(0, 0, 300, 200);
-      const time = Date.now() / 1000;
-      
-      ctx.beginPath();
-      for (let x = 0; x < 300; x++) {
-        const y = 100 + Math.sin(x * 0.02 + time) * 30;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-      
-      requestAnimationFrame(animateGraph);
-    }
-    
-    animateGraph();
-  }
-});
-</script>
-</body></html>
+  <section id="tools">
+    <div class="section-content">
+      <h2>Learning Tools</h2>
+      <div class="tools-grid">
+        <div class="tool-card">
+          <h3>Tool 1</h3>
+          <p>Interactive learning tool description goes here.</p>
+        </div>
+        <div class="tool-card">
+          <h3>Tool 2</h3>
+          <p>Interactive learning tool description goes here.</p>
+        </div>
+        <div class="tool-card">
+          <h3>Tool 3</h3>
+          <p>Interactive learning tool description goes here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="philosophy">
+    <div class="section-content">
+      <h2>Learning Philosophy</h2>
+      <div class="philosophy-content">
+        <div class="philosophy-text">
+          <p>Philosophy content goes here...</p>
+        </div>
+        <div class="philosophy-image">
+          <img src="/api/placeholder/400/300" alt="Philosophy visualization" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="research">
+    <div class="section-content">
+      <h2>Research & Insights</h2>
+      <div class="research-grid">
+        <div class="research-card">
+          <h3>Research Paper 1</h3>
+          <p>Research summary goes here...</p>
+        </div>
+        <div class="research-card">
+          <h3>Research Paper 2</h3>
+          <p>Research summary goes here...</p>
+        </div>
+        <div class="research-card">
+          <h3>Research Paper 3</h3>
+          <p>Research summary goes here...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="section-content">
+      <h2>Upcoming Book</h2>
+      <div class="book-content">
+        <div class="book-info">
+          <h3>Book Title</h3>
+          <p>Book description and preview...</p>
+          <button class="join-waitlist">Join Waitlist</button>
+        </div>
+        <div class="book-image">
+          <img src="/api/placeholder/300/400" alt="Book cover" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2023 TeachOneself. All rights reserved.</p>
+  </footer>
+</body>
+</html>
