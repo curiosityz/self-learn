@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -126,32 +125,194 @@
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
-    .philosophy-content, .book-content {
+    /* New Philosophy Section Styles */
+    .philosophy-content {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 2rem;
     }
 
-    .philosophy-text, .book-info {
+    .journey-timeline {
+      padding: 2rem;
+    }
+
+    .timeline-item h3 {
+      background: linear-gradient(to right, #60a5fa, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mastery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .mastery-card {
+      background-color: #374151;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .mastery-card:hover {
+      transform: translateY(-0.25rem);
+    }
+
+    .mastery-card h4 {
+      margin-bottom: 1rem;
+    }
+
+    .mastery-card ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .mastery-card li {
+      margin-bottom: 0.5rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .mastery-card li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #60a5fa;
+    }
+
+    .philosophy-core {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(168, 85, 247, 0.1));
+      border-radius: 0.5rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .commitment-statement {
+      background-color: #374151;
+      border-radius: 0.5rem;
+      padding: 2rem;
+    }
+
+    .learning-cycle-diagram {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* CTA Section Styles */
+    .cta-section {
+      min-height: 100vh;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
     }
 
-    .join-waitlist {
-      background-color: #60a5fa;
-      color: #f3f4f6;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.375rem;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
+    .cta-container {
+      width: 100%;
+      max-width: 800px;
     }
 
-    .join-waitlist:hover {
-      background-color: #3b82f6;
+    .cta-card {
+      background: linear-gradient(135deg, #374151, #1f2937);
+      border-radius: 1rem;
+      padding: 3rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
+    }
+
+    .cta-card.docked {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      max-width: 400px;
+      padding: 1.5rem;
+      z-index: 99;
+      transform: translateY(0);
+      animation: slideIn 0.3s ease;
+    }
+
+    .cta-content {
+      text-align: center;
+    }
+
+    .cta-forms {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .newsletter-form,
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-divider {
+      position: relative;
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .form-divider:before,
+    .form-divider:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 45%;
+      height: 1px;
+      background: #4b5563;
+    }
+
+    .form-divider:before { left: 0; }
+    .form-divider:after { right: 0; }
+
+    .form-divider span {
+      background: #374151;
+      padding: 0 1rem;
+      color: #9ca3af;
+    }
+
+    input,
+    textarea {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      background: #1f2937;
+      border: 1px solid #4b5563;
+      color: #f3f4f6;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    button {
+      background: linear-gradient(to right, #60a5fa, #a855f7);
+      color: white;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     /* Footer Styles */
@@ -173,6 +334,27 @@
       }
       50% {
         transform: translateY(-20px);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .philosophy-content {
+        grid-template-columns: 1fr;
+      }
+
+      .mastery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .cta-card.docked {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
       }
     }
   </style>
@@ -211,8 +393,8 @@
         });
       });
 
-      // Hover effects for tool and research cards
-      gsap.utils.toArray('.tool-card, .research-card').forEach(card => {
+      // Add animations for philosophy section
+      gsap.utils.toArray('.mastery-card').forEach(card => {
         gsap.from(card, {
           y: 20,
           opacity: 0,
@@ -221,18 +403,51 @@
           scrollTrigger: {
             trigger: card,
             start: 'top 80%',
-            end: 'bottom 20%',
             toggleActions: 'play none none reverse'
           }
         });
+      });
 
-        card.addEventListener('mouseenter', () => {
-          gsap.to(card, { y: -10, duration: 0.3 });
-        });
+      // Animate learning cycle diagram
+      gsap.from('.learning-cycle-diagram', {
+        rotate: 360,
+        duration: 1.5,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.learning-cycle-diagram',
+          start: 'top 80%',
+          toggleActions: 'play none none reverse'
+        }
+      });
 
-        card.addEventListener('mouseleave', () => {
-          gsap.to(card, { y: 0, duration: 0.3 });
+      const ctaCard = document.querySelector('.cta-card');
+      const ctaSection = document.querySelector('.cta-section');
+
+      // Intersection Observer for CTA section
+      const ctaObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting && window.scrollY > entry.target.offsetTop) {
+            ctaCard.classList.add('docked');
+          } else {
+            ctaCard.classList.remove('docked');
+          }
         });
+      }, {
+        threshold: 0,
+        rootMargin: '-20% 0px -20% 0px'
+      });
+
+      ctaObserver.observe(ctaSection);
+
+      // Optional: Add form submission handling
+      document.querySelector('.newsletter-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Add newsletter signup logic here
+      });
+
+      document.querySelector('.contact-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Add contact form submission logic here
       });
     });
   </script>
@@ -244,14 +459,14 @@
       <a href="#tools">Tools</a>
       <a href="#philosophy">Philosophy</a>
       <a href="#research">Research</a>
-      <a href="#book">Book</a>
+      <a href="#cta">Join Us</a>
     </div>
   </nav>
 
   <section id="hero">
     <div class="hero-content">
-      <h1>Become Anything, Achieve Freedom - Teach Oneself.</h1>
-      <p>Welcome to my humble knowledge hub, where I celebrate self-learning, digital marketing, artificial intelligence, programming, psychology, philosophy + more! </p>
+      <h1>Become Anything, Achieve Freedom -- Teach Oneself.</h1>
+      <p>Self-Education, A.I., Marketing, Programming + More</p>
       <div class="arrow-down">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
           <path d="M7 10l5 5 5-5z"/>
@@ -263,19 +478,19 @@
 
   <section id="tools">
     <div class="section-content">
-      <h2>Learning Tools</h2>
+      <h2>Tools I've Built</h2>
       <div class="tools-grid">
         <div class="tool-card">
-          <h3>Tool 1</h3>
-          <p>Interactive learning tool description goes here.</p>
+          <h3>Self-Generating Novel Idea Machine</h3>
+          <p>I wanted to experiment with trying to get LLM's to output original thoughts, so I built this tool. It takes a natural language input consisting of a topic area, then it systematically generates ideas which it compares to a rubric aligned to threshold values. It cycles through ideas until it finds a minimum number of ideas that score as ''novel'' on the  rubric, presenting them neatly to the user..</p>
         </div>
         <div class="tool-card">
-          <h3>Tool 2</h3>
-          <p>Interactive learning tool description goes here.</p>
+          <h3>Book Chapter Automagic Formatter</h3>
+          <p>I wanted to be able to paste in a chapter for a book (or multiple) in absolute plaintext - then have it output a fully styled document by using A.I. to intelligently process the context. Doing so enabled my tool to apply font styling including bold/italic/capitalization, as well as line spacing, paragraph breaks, block quotes, chapter headings, and citations! I tried to break it and it can handle anything you throw at it short of quantum languaging.</p>
         </div>
         <div class="tool-card">
-          <h3>Tool 3</h3>
-          <p>Interactive learning tool description goes here.</p>
+          <h3>Scientific Research Study Proxy</h3>
+          <p>Don't have actual humans to run a study on but need to test a hypothesis? That's why I built this. You build a config with JSON consisting of research area, methodology, personas of your subjects, how to score them, number of iterations, etc and it runs pretty dang helpful studies against digital humans and then analyzes the results.</p>
         </div>
       </div>
     </div>
@@ -286,10 +501,78 @@
       <h2>Learning Philosophy</h2>
       <div class="philosophy-content">
         <div class="philosophy-text">
-          <p>Philosophy content goes here...</p>
+          <div class="journey-timeline">
+            <div class="timeline-item">
+              <h3>The Spark (1998)</h3>
+              <p>Started at age 11 with VB3 and HTML, proving that age is just a number when it comes to learning. This early start showed me that with curiosity and dedication, anyone can master complex skills.</p>
+            </div>
+            
+            <div class="mastery-grid">
+              <div class="mastery-card">
+                <h4>Technical</h4>
+                <ul>
+                  <li>Programming</li>
+                  <li>SEO & PPC</li>
+                  <li>Digital Marketing</li>
+                  <li>E-commerce</li>
+                </ul>
+              </div>
+              <div class="mastery-card">
+                <h4>Creative</h4>
+                <ul>
+                  <li>Writing & Poetry</li>
+                  <li>Graphic Design</li>
+                  <li>Beat Production</li>
+                  <li>Content Creation</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="philosophy-core">
+              <h3>Core Beliefs</h3>
+              <ul>
+                <li>Anyone can master any skill with the right approach and dedication</li>
+                <li>Learning is a systematic process that can be optimized and refined</li>
+                <li>True autonomy comes through self-directed education</li>
+              </ul>
+            </div>
+
+            <div class="commitment-statement">
+              <h3>My Commitment</h3>
+              <p>I'm dedicated to helping others become self-educational powerhouses by sharing the systems and approaches I've developed over decades of self-directed learning. From technical skills to creative pursuits, from psychology to propaganda analysis - I believe in making advanced learning accessible to everyone.</p>
+            </div>
+          </div>
         </div>
         <div class="philosophy-image">
-          <img src="/api/placeholder/400/300" alt="Philosophy visualization" />
+          <div class="learning-cycle-diagram">
+            <svg viewBox="0 0 400 400">
+              <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#60a5fa" />
+                  <stop offset="100%" style="stop-color:#a855f7" />
+                </linearGradient>
+              </defs>
+              <circle cx="200" cy="200" r="180" fill="none" stroke="url(#gradient)" stroke-width="2" />
+              <g transform="translate(200 200)">
+                <g transform="rotate(0)">
+                  <circle cx="0" cy="-140" r="40" fill="#374151" stroke="url(#gradient)" stroke-width="2" />
+                  <text x="0" y="-140" text-anchor="middle" dominant-baseline="middle" fill="#f3f4f6" font-size="14">Curiosity</text>
+                </g>
+                <g transform="rotate(90)">
+                  <circle cx="0" cy="-140" r="40" fill="#374151" stroke="url(#gradient)" stroke-width="2" />
+                  <text x="0" y="-140" text-anchor="middle" dominant-baseline="middle" fill="#f3f4f6" font-size="14">Practice</text>
+                </g>
+                <g transform="rotate(180)">
+                  <circle cx="0" cy="-140" r="40" fill="#374151" stroke="url(#gradient)" stroke-width="2" />
+                  <text x="0" y="-140" text-anchor="middle" dominant-baseline="middle" fill="#f3f4f6" font-size="14">Mastery</text>
+                </g>
+                <g transform="rotate(270)">
+                  <circle cx="0" cy="-140" r="40" fill="#374151" stroke="url(#gradient)" stroke-width="2" />
+                  <text x="0" y="-140" text-anchor="middle" dominant-baseline="middle" fill="#f3f4f6" font-size="14">Teaching</text>
+                </g>
+              </g>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -315,17 +598,30 @@
     </div>
   </section>
 
-  <section id="book">
-    <div class="section-content">
-      <h2>Upcoming Book</h2>
-      <div class="book-content">
-        <div class="book-info">
-          <h3>Book Title</h3>
-          <p>Book description and preview...</p>
-          <button class="join-waitlist">Join Waitlist</button>
-        </div>
-        <div class="book-image">
-          <img src="/api/placeholder/300/400" alt="Book cover" />
+  <section id="cta" class="cta-section">
+    <div class="section-content cta-container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <h2>Join the Learning Revolution</h2>
+          <p>Get exclusive insights, tools, and strategies for self-directed learning</p>
+          
+          <div class="cta-forms">
+            <form class="newsletter-form">
+              <input type="email" placeholder="Enter your email" required>
+              <button type="submit">Subscribe</button>
+            </form>
+            
+            <div class="form-divider">
+              <span>or</span>
+            </div>
+            
+            <form class="contact-form">
+              <input type="text" placeholder="Your name" required>
+              <input type="email" placeholder="Your email" required>
+              <textarea placeholder="Your message" required></textarea>
+              <button type="submit">Send Message</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
