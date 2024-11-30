@@ -1,1115 +1,2192 @@
-
-<html><head><base href="/"><title>TeachOneself - Self-Learning Framework &amp; Community</title><style>:root {  --neon-blue: #083d87;    /* Deep blue */  --deep-purple: #1A1A1A;  /* Darker background for better contrast */  --highlight: #87e2df;    /* Bright turquoise - good for accents */  --accent-2: #083d87;     /* Deep blue for secondary accents */  --text-light: #FFFFFF;   /* Pure white for better contrast */  --surface-dark: #242424; /* Darker surface color for better contrast */}
-
-* {  margin: 0;  padding: 0;  box-sizing: border-box;}
-
-body {  background: var(--deep-purple);  color: var(--text-light); /* Use pure white text */  font-family: 'Inter', sans-serif;  overflow-x: hidden;}
-
-.parallax-bg {  position: fixed;  top: 0;  left: 0;  width: 100%;  height: 100%;  z-index: -1;  background: linear-gradient(45deg, #083d87, #878094);  transform-style: preserve-3d;  pointer-events: none;}
-
-.scroll-lines {  position: fixed;  top: 0;  left: 0;  width: 100%;  height: 100%;  z-index: -1;  opacity: 0.05;  background:   linear-gradient(90deg, transparent 50%, rgba(220,220,220,0.03) 50%),    linear-gradient(rgba(220,220,220,0.03) 50%, transparent 50%);  background-size: 30px 30px;  transform-style: preserve-3d;  animation: scrollBg 20s linear infinite;}
-
-@keyframes scrollBg {  from { background-position: 0 0; }  to { background-position: 0 30px; }}
-
-.hero {  min-height: 100vh;  display: flex;  align-items: center;  justify-content: center;  position: relative;}
-
-.hero::before {  content: '';  position: absolute;  width: 100%;  height: 100%;  background:   radial-gradient(circle at 50% 50%, rgba(0,0,0,0.3) 0%, #111111 100%),    linear-gradient(45deg, rgba(200,200,200,0.05) 0%, rgba(150,150,150,0.05) 100%);  filter: blur(40px);  z-index: 0;}
-
-.particles-js-canvas-el {  position: absolute;  top: 0;  left: 0;  z-index: 1;  transition: filter 0.3s ease;}
-
-.particles-js-canvas-el:hover {  filter: brightness(1.2) contrast(1.1);}
-
-.neural-particles {  position: absolute;  width: 100%;  height: 100%;  top: 0;  left: 0;  z-index: 1;  cursor: crosshair;}
-
-.particle-trail {  position: absolute;  pointer-events: none;  mix-blend-mode: screen;  z-index: 2;  animation: fadeOut 0.8s ease forwards;}
-
-.content {  z-index: 2;  max-width: 1200px;  padding: 2rem;  text-align: center;  margin: 0 auto; /* Add this to center horizontally */  width: 100%; /* Add this to ensure proper width */  display: flex;  flex-direction: column;  align-items: center; /* Center all content horizontally */  justify-content: center; /* Center content vertically */}
-
-h1 {  font-size: 5rem;  font-weight: 900;  background: linear-gradient(45deg, #87e2df, #ffffff);  -webkit-background-clip: text;  -webkit-text-fill-color: transparent;  position: relative;  text-shadow: 0 0 15px rgba(135,226,223,0.5);}
-
-h1::after {  content: attr(data-text);  position: absolute;  left: 0;  top: 0;  z-index: -1;  filter: blur(8px);  opacity: 0.5;  background: linear-gradient(45deg, #87e2df, #ffffff);  -webkit-background-clip: text;  -webkit-text-fill-color: transparent;}
-
-.tagline {  font-size: 1.5rem;  margin-bottom: 3rem;  opacity: 0;  transform: translateY(20px);  animation: fadeUp 0.8s ease forwards 0.5s;}
-
-.features {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  gap: 2rem;  margin-top: 4rem;  width: 100%;  place-items: center; /* This centers grid items */  justify-content: center;}
-
-.feature-card {  position: relative;  overflow: hidden;  background: rgba(255,255,255,0.05); /* Slightly more opaque for better contrast */  padding: 2rem;  border-radius: 15px;  backdrop-filter: blur(10px);  transform: translateY(50px);  opacity: 0;  animation: fadeUp 0.8s ease forwards;  border: 1px solid rgba(200,200,200,0.1);  box-shadow: 0 4px 12px rgba(0,0,0,0.2);  color: var(--text-light);  text-align: center; /* Ensure text is centered */}
-
-.feature-card h3, .feature-card p {  width: 100%;  text-align: center;  margin-bottom: 1rem;}
-
-.cta-button {  display: inline-block;  padding: 1rem 2.5rem;  margin-top: 3rem;  background: linear-gradient(45deg, #87e2df, #083d87);  border: none;  border-radius: 50px;  color: #FFFFFF; /* White text instead of dark */  text-shadow: 0 1px 2px rgba(0,0,0,0.3);  font-size: 1rem;  font-weight: 600;  letter-spacing: 0.5px;  text-transform: uppercase;  text-decoration: none;  transition: transform 0.3s ease, box-shadow 0.3s ease;  cursor: pointer;  position: relative;  overflow: hidden;  box-shadow: 0 4px 12px rgba(0,0,0,0.2);}
-
-.cta-button::before {  content: '';  position: absolute;  top: -50%;  left: -50%;  width: 200%;  height: 200%;  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);  transform: rotate(45deg);  animation: shimmer 3s linear infinite;}
-
-.cta-button:hover {  transform: translateY(-2px);  box-shadow: 0 6px 16px rgba(0,0,0,0.25);}
-
-@keyframes fadeUp {  to {    opacity: 1;    transform: translateY(0);  }}
-
-@keyframes shimmer {  0% { transform: translateX(-100%) rotate(45deg); }  100% { transform: translateX(100%) rotate(45deg); }}
-
-.floating {  animation: float 3s ease-in-out infinite;}
-
-@keyframes float {  0%, 100% {    transform: translateY(0);  }  50% {    transform: translateY(-20px);  }}
-
-canvas {  image-rendering: -webkit-optimize-contrast;  image-rendering: crisp-edges;}
-
-.particles-js-canvas-el:hover + .content {  transform: scale(1.02);  transition: transform 0.3s ease;}
-
-.section {  position: relative;  z-index: 1;  transform-style: preserve-3d;  will-change: transform;}
-
-.innovation-section {  min-height: 100vh;  background: transparent;  position: relative;  z-index: 1;  overflow: hidden;}
-
-.scroll-grid {  position: relative;  padding: 4rem 2rem;}
-
-.grid-line {  position: absolute;  top: 0;  left: 50%;  height: 100%;  width: 1px;  background: linear-gradient(  to bottom,  transparent,  var(--neon-blue),  transparent);  transform-origin: 50% 0%;  animation: expandLine 2s ease forwards;}
-
-.section-title {  font-size: 3rem;  text-align: center;  margin-bottom: 4rem;  background: linear-gradient(45deg, #87e2df, #ffffff);  -webkit-background-clip: text;  -webkit-text-fill-color: transparent;}
-
-.innovation-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 3rem;  max-width: 1200px;  margin: 0 auto;}
-
-.grid-item {  text-align: center;  padding: 2rem;  background: rgba(255,255,255,0.02);  border-radius: 15px;  backdrop-filter: blur(10px);  border: 1px solid rgba(200,200,200,0.1);  transition: transform 0.3s ease;}
-
-.grid-item:hover {  transform: translateY(-5px);}
-
-.stat-circle {  position: relative;  width: 120px;  height: 120px;  margin: 0 auto 2rem;}
-
-.stat-number {  position: absolute;  top: 50%;  left: 50%;  transform: translate(-50%, -50%);  font-size: 1.5rem;  font-weight: bold;  color: #87e2df; /* Use highlight color instead of neon blue for better contrast */}
-
-.progress-ring-circle {  transition: stroke-dashoffset 1s ease;  transform: rotate(-90deg);  transform-origin: 50% 50%;  stroke-dasharray: 326.726;  stroke-dashoffset: 326.726;}
-
-@keyframes expandLine {  from {    transform: scaleY(0);  }  to {    transform: scaleY(1);  }}
-
-.solutions-section {  min-height: 100vh;  background: transparent;  padding: 6rem 2rem;  position: relative;  z-index: 1;  overflow: hidden;}
-
-.solutions-container {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 3rem;  max-width: 1400px;  margin: 4rem auto 0;}
-
-.solution-card {  background: rgba(255,255,255,0.08); /* More opaque background */  border: 1px solid rgba(200,200,200,0.1);  border-radius: 20px;  padding: 2.5rem;  transition: all 0.4s ease;  position: relative;  overflow: hidden;  backdrop-filter: blur(10px);  color: var(--text-light);}
-
-.solution-card:hover {  transform: translateY(-10px);  background: rgba(255,255,255,0.1);  border-color: rgba(200,200,200,0.2);}
-
-.solution-icon {  color: var(--neon-blue);  margin-bottom: 1.5rem;  position: relative;  z-index: 1;}
-
-.solution-card h3 {  color: #fff;  font-size: 1.5rem;  margin-bottom: 1rem;}
-
-.solution-card p {  color: rgba(255,255,255,0.7);  line-height: 1.6;  margin-bottom: 2rem;}
-
-.progress-bar {  height: 4px;  background: rgba(255,255,255,0.1);  border-radius: 2px;  overflow: hidden;}
-
-.progress {  height: 100%;  background: linear-gradient(90deg, #87e2df, #083d87);  width: 0;  transition: width 1.5s ease;}
-
-.solution-card:hover .progress {  width: 100%;}
-
-.case-studies-section {  min-height: 100vh;  background: transparent;  padding: 8rem 2rem;  position: relative;  z-index: 1;  overflow: hidden;}
-
-.case-studies-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));  gap: 3rem;  max-width: 1400px;  margin: 4rem auto 0;}
-
-.case-study-card {  background: rgba(255,255,255,0.02);  border: 1px solid rgba(200,200,200,0.1);  border-radius: 20px;  padding: 2.5rem;  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);  position: relative;  overflow: hidden;  backdrop-filter: blur(10px);}
-
-.case-study-card:hover {  transform: translateY(-10px);  background: rgba(255,255,255,0.05);  border-color: rgba(200,200,200,0.2);}
-
-.case-study-image {  position: relative;  height: 200px;  margin-bottom: 2rem;}
-
-.case-study-blob {  position: absolute;  width: 100%;  height: 100%;  opacity: 0.1;  transition: all 0.5s ease;}
-
-.case-study-card:hover .case-study-blob {  transform: scale(1.1) rotate(10deg);  opacity: 0.2;}
-
-.study-number {  position: absolute;  top: 50%;  left: 50%;  transform: translate(-50%, -50%);  font-size: 4rem;  font-weight: 900;  color: rgba(255,255,255,0.1);  transition: all 0.5s;}
-
-.case-study-card:hover .study-number {  transform: translate(-50%, -50%) scale(1.2);  color: rgba(255,255,255,0.2);}
-
-.metrics {  display: grid;  grid-template-columns: 1fr 1fr;  gap: 1.5rem;  margin-top: 2rem;  padding-top: 2rem;  border-top: 1px solid rgba(255,255,255,0.1);}
-
-.metric {  display: flex;  flex-direction: column;  align-items: center;}
-
-.metric-value {  font-size: 2rem;  font-weight: 700;  color: #87e2df; /* Use highlight color instead of neon blue for better contrast */  margin-bottom: 0.5rem;}
-
-.metric-label {  font-size: 0.9rem;  color: rgba(255,255,255,0.6);}
-
-.timeline-section {  min-height: 100vh;  padding: 8rem 2rem;  position: relative;  overflow: hidden;}
-
-.timeline-container {  max-width: 1200px;  margin: 4rem auto;  position: relative;  padding: 2rem 0;}
-
-.timeline-track {  position: absolute;  top: 0;  left: 50%;  width: 2px;  height: 100%;  background: linear-gradient(to bottom,    transparent,    #87e2df,    #083d87,    transparent);  transform: translateX(-50%);}
-
-.timeline-item {  position: relative;  margin: 6rem 0;  width: 100%;  display: flex;  justify-content: center;}
-
-.timeline-content {  width: 400px;  background: rgba(255,255,255,0.02);  border: 1px solid rgba(200,200,200,0.1);  border-radius: 15px;  padding: 2rem;  position: relative;  backdrop-filter: blur(10px);  transform: translateY(50px);  opacity: 0;  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);}
-
-.timeline-content::before {  content: '';  position: absolute;  top: 50%;  width: 20px;  height: 20px;  background: var(--neon-blue);  border-radius: 50%;  transform: translateY(-50%);}
-
-.timeline-item:nth-child(odd) .timeline-content {  margin-right: calc(50% + 30px);}
-
-.timeline-item:nth-child(even) .timeline-content {  margin-left: calc(50% + 30px);}
-
-.timeline-item:nth-child(odd) .timeline-content::before {  right: -40px;}
-
-.timeline-item:nth-child(even) .timeline-content::before {  left: -40px;}
-
-.timeline-date {  font-size: 1.5rem;  font-weight: 700;  color: #87e2df; /* Use highlight color instead of neon blue */  margin-bottom: 1rem;}
-
-.timeline-stats {  display: grid;  grid-template-columns: 1fr 1fr;  gap: 1rem;  margin-top: 1.5rem;  padding-top: 1.5rem;  border-top: 1px solid rgba(255,255,255,0.1);}
-
-.stat-value {  font-size: 1.5rem;  font-weight: 700;  color: #87e2df; /* Use highlight color instead of neon blue */}
-
-.stat-label {  font-size: 0.9rem;  color: rgba(255,255,255,0.6);}
-
-.cta-section {  min-height: 100vh;  padding: 8rem 2rem;  position: relative;  overflow: hidden;  display: flex;  flex-direction: column;  align-items: center;  justify-content: center;}
-
-.neural-grid-overlay {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background-image:   linear-gradient(rgba(220,220,220,0.03) 1px, transparent 1px),    linear-gradient(90deg, rgba(220,220,220,0.03) 1px, transparent 1px);  background-size: 20px 20px;  pointer-events: none;}
-
-.cta-container {  max-width: 600px;  width: 100%;  margin: 4rem auto;  position: relative;}
-
-.neural-form {  background: rgba(255,255,255,0.02);  padding: 3rem;  border-radius: 20px;  backdrop-filter: blur(10px);  border: 1px solid rgba(200,200,200,0.1);  transform-style: preserve-3d;  perspective: 1000px;}
-
-.input-wrapper {  position: relative;  margin-bottom: 2rem;}
-
-.neural-form input {  width: 100%;  padding: 1rem;  background: rgba(255,255,255,0.08);  border: 1px solid rgba(200,200,200,0.2);  border-radius: 8px;  color: var(--text-light);  font-size: 1rem;  transition: all 0.3s ease;}
-
-.neural-form input:focus {  outline: none;  border-color: var(--neon-blue);  background: rgba(255,255,255,0.05);}
-
-.neural-form label {  position: absolute;  left: 1rem;  top: 50%;  transform: translateY(-50%);  color: rgba(255,255,255,0.6);  transition: all 0.3s ease;  pointer-events: none;}
-
-.neural-form input:focus ~ label, .neural-form input:not(:placeholder-shown) ~ label {  top: -0.5rem;  left: 0.5rem;  font-size: 0.8rem;  color: var(--neon-blue);  background: var(--deep-purple);  padding: 0 0.5rem;}
-
-.input-focus-effect {  position: absolute;  bottom: 0;  left: 50%;  width: 0;  height: 2px;  background: linear-gradient(90deg, #c0c0c0, #ffffff);  transition: all 0.3s ease;  transform: translateX(-50%);}
-
-.neural-form input:focus ~ .input-focus-effect {  width: 100%;}
-
-.submit-container {  margin-top: 3rem;  text-align: center;}
-
-.neural-submit {  position: relative;  padding: 1rem 3rem;  background: transparent;  border: none;  color: var(--text-light);  font-size: 1.1rem;  font-weight: 600;  cursor: pointer;  overflow: hidden;  transition: all 0.3s ease;}
-
-.button-effects {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;}
-
-.effect-1, .effect-2, .effect-3 {  position: absolute;  border-radius: inherit;}
-
-.effect-1 {  inset: 0;  background: linear-gradient(45deg, #87e2df, #083d87);  opacity: 0.8;}
-
-.effect-2 {  inset: 2px;  background: #111111;}
-
-.effect-3 {  inset: 3px;  background: linear-gradient(45deg, #87e2df, #083d87);  opacity: 0;  transition: opacity 0.3s ease;}
-
-.neural-submit:hover .effect-3 {  opacity: 0.2;}
-
-.button-text {  position: relative;  z-index: 1;}
-
-.neural-form:focus-within {  transform: translateZ(20px);  box-shadow: 0 20px 40px rgba(0,0,0,0.2);}
-
-.hybrid-showcase-section {  min-height: 100vh;  padding: 8rem 2rem;  position: relative;  background: linear-gradient(180deg, #111111, #1a1a1a);}
-
-.hybrid-showcase-container {  max-width: 1400px;  margin: 0 auto;}
-
-.showcase-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 3rem;  margin-top: 4rem;}
-
-.showcase-item {  position: relative;  background: rgba(255,255,255,0.02);  border-radius: 20px;  padding: 2rem;  backdrop-filter: blur(10px);  border: 1px solid rgba(200,200,200,0.1);  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);}
-
-.showcase-item:hover {  transform: translateY(-10px);  border-color: var(--neon-blue);}
-
-.media-wrapper {  position: relative;  aspect-ratio: 16/9;  margin-bottom: 2rem;  overflow: hidden;  border-radius: 12px;  background: rgba(0,0,0,0.2);}
-
-.glitch-overlay {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  pointer-events: none;  mix-blend-mode: screen;}
-
-.audio-controls {  position: absolute;  bottom: 0;  left: 0;  width: 100%;  padding: 1rem;  background: linear-gradient(transparent, rgba(0,0,0,0.8));}
-
-.play-btn {  background: none;  border: none;  color: var(--text-light);  cursor: pointer;  padding: 0.5rem;  border-radius: 50%;  transition: transform 0.3s ease;}
-
-.play-btn:hover {  transform: scale(1.1);}
-
-.audio-progress {  display: flex;  align-items: center;  gap: 1rem;  margin-top: 0.5rem;}
-
-.interaction-overlay {  position: absolute;  inset: 0;  cursor: crosshair;}
-
-canvas {  width: 100%;  height: 100%;  object-fit: cover;}
-
-.insights-section {  min-height: 100vh;  padding: 8rem 2rem;  position: relative;  background: linear-gradient(180deg, var(--surface-dark), var(--deep-purple));}
-
-.neural-insights-container {  max-width: 1400px;  margin: 0 auto;  position: relative;}
-
-.neural-pulse {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: radial-gradient(circle at center, rgba(135,226,223,0.1) 0%, transparent 70%);  animation: pulse 4s ease-in-out infinite;}
-
-@keyframes pulse {  0%, 100% { transform: scale(1); opacity: 0.5; }  50% { transform: scale(1.2); opacity: 0.2; }}
-
-.insight-nodes {  display: flex;  flex-wrap: wrap;  gap: 2rem;  justify-content: center;  perspective: 1000px;}
-
-.insight-node {  background: rgba(255,255,255,0.03);  border: 1px solid rgba(200,200,200,0.1);  border-radius: 15px;  padding: 2rem;  width: 300px;  backdrop-filter: blur(10px);  transform-style: preserve-3d;  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);}
-
-.insight-node:hover {  transform: translateZ(30px) rotateX(5deg) rotateY(5deg);}
-
-.insight-type {  font-size: 0.9rem;  color: var(--neon-blue);  text-transform: uppercase;  letter-spacing: 1px;  margin-bottom: 1rem;}
-
-.insight-content {  position: relative;  padding-left: 1rem;  border-left: 2px solid var(--highlight);}
-
-.confidence-meter {  height: 4px;  background: rgba(255,255,255,0.1);  border-radius: 2px;  margin-top: 1rem;  overflow: hidden;}
-
-.confidence-level {  height: 100%;  background: linear-gradient(90deg, #87e2df, #083d87);  transform-origin: left;  animation: fillWidth 1.5s ease forwards;}
-
-@keyframes fillWidth {  from { transform: scaleX(0); }  to { transform: scaleX(var(--scale)); }}
-
-.neural-connections {  position: absolute;  inset: 0;  pointer-events: none;  z-index: 0;}
-
-.innovation-lab-section {  min-height: 100vh;  background: linear-gradient(135deg, var(--deep-purple), var(--surface-dark));  padding: 6rem 2rem;}
-
-.lab-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 2rem;  position: relative;  z-index: 2;  max-width: 1400px;  margin: 0 auto;  justify-items: center; /* Centers items horizontally within the grid */  align-items: start;    /* Aligns items to the top */}
-
-.lab-card {  background: rgba(255,255,255,0.08); /* Consistent background across all cards */  border: 1px solid rgba(200,200,200,0.1);  border-radius: 20px;  padding: 2rem;  position: relative;  overflow: hidden;  backdrop-filter: blur(10px);  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);  color: var(--text-light);}
-
-.lab-card:hover {  transform: translateY(-5px) scale(1.02);  border-color: #87e2df;  box-shadow: 0 10px 30px rgba(0,0,0,0.2);}
-
-.lab-card::before {  content: '';  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03));  opacity: 0;  transition: opacity 0.3s ease;}
-
-.lab-card:hover::before {  opacity: 1;}
-
-.experiment-visual {  height: 200px;  margin: -2rem -2rem 2rem;  background: rgba(0,0,0,0.2);  position: relative;  overflow: hidden;}
-
-.data-stream {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background:   linear-gradient(90deg,    transparent 50%,    rgba(135,226,223,0.05) 50%    );  background-size: 4px 100%;  animation: dataFlow 20s linear infinite;}
-
-@keyframes dataFlow {  from { transform: translateX(0); }  to { transform: translateX(-4px); }}
-
-.metric-ring {  position: absolute;  top: 50%;  left: 50%;  transform: translate(-50%, -50%);}
-
-.pulse-ring {  stroke: var(--neon-blue);  stroke-width: 2;  fill: none;  r: 20;  transform-origin: center;  animation: pulse 2s ease-out infinite;}
-
-@keyframes pulse {  0% { r: 20; stroke-opacity: 1; }  100% { r: 40; stroke-opacity: 0; }}
-
-.scrolling-cta {  position: relative;  padding: 6rem 2rem;  background: var(--deep-purple);  overflow: hidden;  color: var(--text-light);}
-
-.cta-container {  max-width: 800px;  margin: 0 auto;  position: relative;  z-index: 2;}
-
-.cta-content {  text-align: center;  display: flex;  flex-direction: column;  align-items: center;  gap: 2rem;}
-
-.cta-icon {  width: 120px;  height: 120px;  margin-bottom: 2rem;}
-
-.network-icon {  width: 100%;  height: 100%;  color: var(--highlight);}
-
-.node {  animation: pulseNode 3s ease-in-out infinite;}
+<html><head><base href="/">
+<title>TeachOneself - Self-Learning Framework &amp; Community</title>
+<style>
+:root {  
+  --neon-blue: #083d87;    /* Deep blue */  
+  --deep-purple: #1A1A1A;  /* Darker background for better contrast */  
+  --highlight: #87e2df;    /* Bright turquoise - good for accents */  
+  --accent-2: #083d87;     /* Deep blue for secondary accents */  
+  --text-light: #FFFFFF;   /* Pure white for better contrast */  
+  --surface-dark: #242424; /* Darker surface color for better contrast */ 
+}
+
+* {  
+  margin: 0;  
+  padding: 0;  
+  box-sizing: border-box;
+}
+
+body {  
+  background: var(--deep-purple);  
+  color: var(--text-light); /* Use pure white text */  
+  font-family: 'Inter', sans-serif;  
+  overflow-x: hidden;
+}
+
+.parallax-bg {  
+  position: fixed;  
+  top: 0;  
+  left: 0;  
+  width: 100%;  
+  height: 100%;  
+  z-index: -1;  
+  background: linear-gradient(45deg, #083d87, #878094);  
+  transform-style: preserve-3d;  
+  pointer-events: none;
+}
+
+.scroll-lines {  
+  position: fixed;  
+  top: 0;  
+  left: 0;  
+  width: 100%;  
+  height: 100%;  
+  z-index: -1;  
+  opacity: 0.05;  
+  background:   
+    linear-gradient(90deg, transparent 50%, rgba(220,220,220,0.03) 50%),    
+    linear-gradient(rgba(220,220,220,0.03) 50%, transparent 50%);  
+  background-size: 30px 30px;  
+  transform-style: preserve-3d;  
+  animation: scrollBg 20s linear infinite;
+}
+
+@keyframes scrollBg {  
+  from { background-position: 0 0; }  
+  to { background-position: 0 30px; }
+}
+
+.hero {  
+  min-height: 100vh;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  position: relative;
+}
+
+.hero::before {  
+  content: '';  
+  position: absolute;  
+  width: 100%;  
+  height: 100%;  
+  background:   
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0.3) 0%, #111111 100%),    
+    linear-gradient(45deg, rgba(200,200,200,0.05) 0%, rgba(150,150,150,0.05) 100%);  
+  filter: blur(40px);  
+  z-index: 0;
+}
+
+.particles-js-canvas-el {  
+  position: absolute;  
+  top: 0;  
+  left: 0;  
+  z-index: 1;  
+  transition: filter 0.3s ease;
+}
+
+.particles-js-canvas-el:hover {  
+  filter: brightness(1.2) contrast(1.1);
+}
+
+.neural-particles {  
+  position: absolute;  
+  width: 100%;  
+  height: 100%;  
+  top: 0;  
+  left: 0;  
+  z-index: 1;  
+  cursor: crosshair;
+}
+
+.particle-trail {  
+  position: absolute;  
+  pointer-events: none;  
+  mix-blend-mode: screen;  
+  z-index: 2;  
+  animation: fadeOut 0.8s ease forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+.content {  
+  z-index: 2;  
+  max-width: 1200px;  
+  padding: 2rem;  
+  text-align: center;  
+  margin: 0 auto; /* Center horizontally */  
+  width: 100%; /* Ensure proper width */  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center; /* Center all content horizontally */  
+  justify-content: center; /* Center content vertically */  
+  position: absolute;  
+  top: 50%;  
+  left: 50%;  
+  transform: translate(-50%, -50%);
+}
+
+.header-section {  
+  display: flex;  
+  align-items: center;  
+  margin-bottom: 2rem;  
+}
+
+.tagline {  
+  font-size: 1.5rem;  
+  margin-bottom: 3rem;  
+  opacity: 0;  
+  transform: translateY(20px);  
+  animation: fadeUp 0.8s ease forwards 0.5s;
+}
+
+h2, h3, p {
+  margin-bottom: 1rem;
+}
+
+.cta-button {  
+  display: inline-block;  
+  padding: 1rem 2.5rem;  
+  margin-top: 3rem;  
+  background: linear-gradient(45deg, #87e2df, #083d87);  
+  border: none;  
+  border-radius: 50px;  
+  color: #FFFFFF; /* White text instead of dark */  
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);  
+  font-size: 1rem;  
+  font-weight: 600;  
+  letter-spacing: 0.5px;  
+  text-transform: uppercase;  
+  text-decoration: none;  
+  transition: transform 0.3s ease, box-shadow 0.3s ease;  
+  cursor: pointer;  
+  position: relative;  
+  overflow: hidden;  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.cta-button::before {  
+  content: '';  
+  position: absolute;  
+  top: -50%;  
+  left: -50%;  
+  width: 200%;  
+  height: 200%;  
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);  
+  transform: rotate(45deg);  
+  animation: shimmer 3s linear infinite;
+}
+
+.cta-button:hover {  
+  transform: translateY(-2px);  
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+@keyframes fadeUp {  
+  to {    
+    opacity: 1;    
+    transform: translateY(0);  
+  }
+}
+
+@keyframes shimmer {  
+  0% { transform: translateX(-100%) rotate(45deg); }  
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.floating {  
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {  
+  0%, 100% {    
+    transform: translateY(0);  
+  }  
+  50% {    
+    transform: translateY(-20px);  
+  } 
+}
+
+canvas {  
+  image-rendering: -webkit-optimize-contrast;  
+  image-rendering: crisp-edges;
+}
+
+.section {  
+  position: relative;  
+  z-index: 1;  
+  transform-style: preserve-3d;  
+  will-change: transform;
+}
+
+.innovation-section {  
+  min-height: 100vh;  
+  background: transparent;  
+  position: relative;  
+  z-index: 1;  
+  overflow: hidden;
+}
+
+#services {
+    text-align: center;
+}
+
+.scroll-grid {  
+  position: relative;  
+  padding: 4rem 2rem;
+}
+
+.grid-line {  
+  position: absolute;  
+  top: 0;  
+  left: 50%;  
+  height: 100%;  
+  width: 1px;  
+  background: linear-gradient(  
+    to bottom,  
+    transparent,  
+    var(--neon-blue),  
+    transparent);  
+  transform-origin: 50% 0%;  
+  animation: expandLine 2s ease forwards;
+}
+
+@keyframes expandLine {  
+  from {    
+    transform: scaleY(0);  
+  }  
+  to {    
+    transform: scaleY(1);  
+  }
+}
+
+.section-title {  
+  font-size: 3rem;  
+  text-align: center;  
+  margin-bottom: 4rem;  
+  background: linear-gradient(45deg, #87e2df, #ffffff);  
+  -webkit-background-clip: text;  
+  -webkit-text-fill-color: transparent;
+}
+
+.innovation-grid {  
+  display: grid;  
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  
+  gap: 3rem;  
+  max-width: 1200px;  
+  margin: 0 auto;
+}
+
+.grid-item {  
+  text-align: center;  
+  padding: 2rem;  
+  background: rgba(255,255,255,0.02);  
+  border-radius: 15px;  
+  backdrop-filter: blur(10px);  
+  border: 1px solid rgba(200,200,200,0.1);  
+  transition: transform 0.3s ease;
+}
+
+.grid-item:hover {  
+  transform: translateY(-5px);
+}
+
+.stat-circle {  
+  position: relative;  
+  width: 120px;  
+  height: 120px;  
+  margin: 0 auto 2rem;
+}
+
+.stat-number {  
+  position: absolute;  
+  top: 50%;  
+  left: 50%;  
+  transform: translate(-50%, -50%);  
+  font-size: 1.5rem;  
+  font-weight: bold;  
+  color: #87e2df; /* Use highlight color instead of neon blue for better contrast */
+}
+
+.progress-ring-circle {  
+  transition: stroke-dashoffset 1s ease;  
+  transform: rotate(-90deg);  
+  transform-origin: 50% 50%;  
+  stroke-dasharray: 326.726;  
+  stroke-dashoffset: 326.726;
+}
+
+.solutions-section {  
+  min-height: 100vh;  
+  background: transparent;  
+  padding: 6rem 2rem;  
+  position: relative;  
+  z-index: 1;  
+  overflow: hidden;
+}
+
+.solutions-container {  
+  display: grid;  
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  
+  gap: 3rem;  
+  max-width: 1400px;  
+  margin: 4rem auto 0;
+}
+
+.solution-card {  
+  background: rgba(255,255,255,0.08); /* More opaque background */  
+  border: 1px solid rgba(200,200,200,0.1);  
+  border-radius: 20px;  
+  padding: 2.5rem;  
+  transition: all 0.4s ease;  
+  position: relative;  
+  overflow: hidden;  
+  backdrop-filter: blur(10px);  
+  color: var(--text-light);  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;  
+  text-align: center;
+}
+
+.solution-card:hover {  
+  transform: translateY(-10px);  
+  background: rgba(255,255,255,0.1);  
+  border-color: rgba(200,200,200,0.2);
+}
+
+.solution-card h3 {  
+  color: #fff;  
+  font-size: 1.5rem;  
+  margin-bottom: 1rem;
+}
+
+.solution-card p {  
+  color: rgba(255,255,255,0.7);  
+  line-height: 1.6;  
+  margin-bottom: 2rem;
+}
+
+.progress-bar {  
+  height: 4px;  
+  background: rgba(255,255,255,0.1);  
+  border-radius: 2px;  
+  overflow: hidden;
+}
+
+.progress {  
+  height: 100%;  
+  background: linear-gradient(90deg, #87e2df, #083d87);  
+  width: 0;  
+  transition: width 1.5s ease;
+}
+
+.solution-card:hover .progress {  
+  width: 100%;
+}
+
+.case-studies-section {  
+  min-height: 100vh;  
+  background: transparent;  
+  padding: 8rem 2rem;  
+  position: relative;  
+  z-index: 1;  
+  overflow: hidden;
+}
+
+.case-studies-container {  
+  max-width: 1400px;  
+  margin: 0 auto;  
+  padding: 2rem 0;
+}
+
+.case-studies-grid {  
+  display: grid;  
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));  
+  gap: 3rem;  
+  max-width: 1400px;  
+  margin: 4rem auto 0;
+}
+
+.case-study-card {  
+  background: rgba(255,255,255,0.02);  
+  border: 1px solid rgba(200,200,200,0.1);  
+  border-radius: 20px;  
+  padding: 2.5rem;  
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);  
+  position: relative;  
+  overflow: hidden;  
+  backdrop-filter: blur(10px);  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;  
+  text-align: center;
+}
+
+.case-study-card:hover {  
+  transform: translateY(-10px);  
+  background: rgba(255,255,255,0.05);  
+  border-color: rgba(200,200,200,0.2);
+}
+
+.case-study-card h3 {  
+  color: #fff;  
+  font-size: 1.5rem;  
+  margin-bottom: 1rem;
+}
+
+.case-study-card p {  
+  color: rgba(255,255,255,0.7);  
+  line-height: 1.6;  
+  margin-bottom: 2rem;
+}
+
+.metrics {  
+  display: grid;  
+  grid-template-columns: 1fr 1fr;  
+  gap: 1.5rem;  
+  margin-top: 2rem;  
+  padding-top: 2rem;  
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.metric {  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;
+}
+
+.metric-value {  
+  font-size: 2rem;  
+  font-weight: 700;  
+  color: #87e2df; /* Use highlight color instead of neon blue for better contrast */  
+  margin-bottom: 0.5rem;
+}
+
+.metric-label {  
+  font-size: 0.9rem;  
+  color: rgba(255,255,255,0.6);
+}
+
+.timeline-section {  
+  min-height: 100vh;  
+  padding: 8rem 2rem;  
+  position: relative;  
+  overflow: hidden;
+}
+
+.timeline-container {  
+  max-width: 1200px;  
+  margin: 4rem auto;  
+  position: relative;  
+  padding: 2rem 0;
+}
+
+.timeline-track {  
+  position: absolute;  
+  top: 0;  
+  left: 50%;  
+  width: 2px;  
+  height: 100%;  
+  background: linear-gradient(to bottom,    
+    transparent,    
+    #87e2df,    
+    #083d87,    
+    transparent);  
+  transform: translateX(-50%);
+}
+
+.timeline-item {  
+  position: relative;  
+  margin: 6rem 0;  
+  width: 100%;  
+  display: flex;  
+  justify-content: center;
+}
+
+.timeline-content {  
+  width: 400px;  
+  background: rgba(255,255,255,0.02);  
+  border: 1px solid rgba(200,200,200,0.1);  
+  border-radius: 15px;  
+  padding: 2rem;  
+  position: relative;  
+  backdrop-filter: blur(10px);  
+  transform: translateY(50px);  
+  opacity: 0;  
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-content::before {  
+  content: '';  
+  position: absolute;  
+  top: 50%;  
+  width: 20px;  
+  height: 20px;  
+  background: var(--neon-blue);  
+  border-radius: 50%;  
+  transform: translateY(-50%);
+}
+
+.timeline-item:nth-child(odd) .timeline-content {  
+  margin-right: calc(50% + 30px);
+}
+
+.timeline-item:nth-child(even) .timeline-content {  
+  margin-left: calc(50% + 30px);
+}
+
+.timeline-item:nth-child(odd) .timeline-content::before {  
+  right: -40px;
+}
+
+.timeline-item:nth-child(even) .timeline-content::before {  
+  left: -40px;
+}
+
+.timeline-date {  
+  font-size: 1.5rem;  
+  font-weight: 700;  
+  color: #87e2df; /* Use highlight color instead of neon blue */  
+  margin-bottom: 1rem;
+}
+
+.timeline-stats {  
+  display: grid;  
+  grid-template-columns: 1fr 1fr;  
+  gap: 1rem;  
+  margin-top: 1.5rem;  
+  padding-top: 1.5rem;  
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-value {  
+  font-size: 1.5rem;  
+  font-weight: 700;  
+  color: #87e2df; /* Use highlight color instead of neon blue */
+}
+
+.stat-label {  
+  font-size: 0.9rem;  
+  color: rgba(255,255,255,0.6);
+}
+
+.cta-section {  
+  min-height: 100vh;  
+  padding: 8rem 2rem;  
+  position: relative;  
+  overflow: hidden;  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;  
+  justify-content: center;
+}
+
+.neural-grid-overlay {  
+  position: absolute;  
+  top: 0;  
+  left: 0;  
+  width: 100%;  
+  height: 100%;  
+  background-image:   
+    linear-gradient(rgba(220,220,220,0.03) 1px, transparent 1px),    
+    linear-gradient(90deg, rgba(220,220,220,0.03) 1px, transparent 1px);  
+  background-size: 20px 20px;  
+  pointer-events: none;
+}
+
+.cta-container {  
+  max-width: 600px;  
+  width: 100%;  
+  margin: 4rem auto;  
+  position: relative;
+}
+
+.neural-form {  
+  background: rgba(255,255,255,0.02);  
+  padding: 3rem;  
+  border-radius: 20px;  
+  backdrop-filter: blur(10px);  
+  border: 1px solid rgba(200,200,200,0.1);  
+  transform-style: preserve-3d;  
+  perspective: 1000px;  
+  display: flex;  
+  flex-direction: column;  
+  align-items: stretch;
+}
+
+.input-wrapper {  
+  position: relative;  
+  margin-bottom: 2rem;
+}
+
+.neural-form input {  
+  width: 100%;  
+  padding: 1rem;  
+  background: rgba(255,255,255,0.08);  
+  border: 1px solid rgba(200,200,200,0.2);  
+  border-radius: 8px;  
+  color: var(--text-light);  
+  font-size: 1rem;  
+  transition: all 0.3s ease;
+}
+
+.neural-form input:focus {  
+  outline: none;  
+  border-color: var(--neon-blue);  
+  background: rgba(255,255,255,0.05);
+}
+
+.neural-form label {  
+  position: absolute;  
+  left: 1rem;  
+  top: 50%;  
+  transform: translateY(-50%);  
+  color: rgba(255,255,255,0.6);  
+  transition: all 0.3s ease;  
+  pointer-events: none;
+}
+
+.neural-form input:focus ~ label, .neural-form input:not(:placeholder-shown) ~ label {  
+  top: -0.5rem;  
+  left: 0.5rem;  
+  font-size: 0.8rem;  
+  color: var(--neon-blue);  
+  background: var(--deep-purple);  
+  padding: 0 0.5rem;
+}
+
+.input-focus-effect {  
+  position: absolute;  
+  bottom: 0;  
+  left: 50%;  
+  width: 0;  
+  height: 2px;  
+  background: linear-gradient(90deg, #c0c0c0, #ffffff);  
+  transition: all 0.3s ease;  
+  transform: translateX(-50%);
+}
+
+.neural-form input:focus ~ .input-focus-effect {  
+  width: 100%;
+}
+
+.submit-container {  
+  margin-top: 3rem;  
+  text-align: center;
+}
+
+.neural-submit {  
+  position: relative;  
+  padding: 1rem 3rem;  
+  background: transparent;  
+  border: none;  
+  color: var(--text-light);  
+  font-size: 1.1rem;  
+  font-weight: 600;  
+  cursor: pointer;  
+  overflow: hidden;  
+  transition: all 0.3s ease;
+}
+
+.button-effects {  
+  position: absolute;  
+  top: 0;  
+  left: 0;  
+  width: 100%;  
+  height: 100%;
+}
+
+.effect-1, .effect-2, .effect-3 {  
+  position: absolute;  
+  border-radius: inherit;
+}
+
+.effect-1 {  
+  inset: 0;  
+  background: linear-gradient(45deg, #87e2df, #083d87);  
+  opacity: 0.8;
+}
+
+.effect-2 {  
+  inset: 2px;  
+  background: #111111;
+}
+
+.effect-3 {  
+  inset: 3px;  
+  background: linear-gradient(45deg, #87e2df, #083d87);  
+  opacity: 0;  
+  transition: opacity 0.3s ease;
+}
+
+.neural-submit:hover .effect-3 {  
+  opacity: 0.2;
+}
+
+.button-text {  
+  position: relative;  
+  z-index: 1;
+}
+
+.neural-form:focus-within {  
+  transform: translateZ(20px);  
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.innovation-showcase-section {  
+  min-height: 100vh;  
+  padding: 8rem 2rem;  
+  position: relative;  
+  background: linear-gradient(180deg, #111111, #1a1a1a);
+}
+
+.innovation-showcase-container {  
+  max-width: 1400px;  
+  margin: 0 auto;
+}
+
+.showcase-grid {  
+  display: grid;  
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  
+  gap: 3rem;  
+  margin-top: 4rem;
+}
+
+.showcase-item {  
+  position: relative;  
+  background: rgba(255,255,255,0.02);  
+  border-radius: 20px;  
+  padding: 2rem;  
+  backdrop-filter: blur(10px);  
+  border: 1px solid rgba(200,200,200,0.1);  
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.showcase-item:hover {  
+  transform: translateY(-10px);  
+  border-color: var(--neon-blue);
+}
+
+.media-wrapper {  
+  position: relative;  
+  aspect-ratio: 16/9;  
+  margin-bottom: 2rem;  
+  overflow: hidden;  
+  border-radius: 12px;  
+  background: rgba(0,0,0,0.2);
+}
+
+.glitch-overlay {  
+  position: absolute;  
+  top: 0;  
+  left: 0;  
+  width: 100%;  
+  height: 100%;  
+  pointer-events: none;  
+  mix-blend-mode: screen;
+}
+
+.audio-controls {  
+  position: absolute;  
+  bottom: 0;  
+  left: 0;  
+  width: 100%;  
+  padding: 1rem;  
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+}
+
+.play-btn {  
+  background: none;  
+  border: none;  
+  color: var(--text-light);  
+  cursor: pointer;  
+  padding: 0.5rem;  
+  border-radius: 50%;  
+  transition: transform 0.3s ease;
+}
+
+.play-btn:hover {  
+  transform: scale(1.1);
+}
+
+.audio-progress {  
+  display: flex;  
+  align-items: center;  
+  gap: 1rem;  
+  margin-top: 0.5rem;
+}
+
+.interaction-overlay {  
+  position: absolute;  
+  inset: 0;  
+  cursor: crosshair;
+}
+
+.canvas {
+  width: 100%;  
+  height: 100%;  
+  object-fit: cover;
+}
+
+.innovation-lab-section {  
+  min-height: 100vh;  
+  background: linear-gradient(135deg, var(--deep-purple), var(--surface-dark));  
+  padding: 6rem 2rem;
+}
+
+.lab-grid {  
+  display: grid;  
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  
+  gap: 2rem;  
+  position: relative;  
+  z-index: 2;  
+  max-width: 1400px;  
+  margin: 0 auto;  
+  justify-items: center; /* Centers items horizontally within the grid */  
+  align-items: start;    /* Aligns items to the top */
+}
+
+.lab-card {  
+  background: rgba(255,255,255,0.08); /* Consistent background across all cards */  
+  border: 1px solid rgba(200,200,200,0.1);  
+  border-radius: 20px;  
+  padding: 2rem;  
+  position: relative;  
+  overflow: hidden;  
+  backdrop-filter: blur(10px);  
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);  
+  color: var(--text-light);  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;  
+  text-align: center;
+}
+
+.lab-card:hover {  
+  transform: translateY(-5px) scale(1.02);  
+  border-color: #87e2df;  
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.lab-card::before {  
+  content: '';  
+  position: absolute;  
+  top: 0;  
+  left: 0;  
+  width: 100%;  
+  height: 100%;  
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03));  
+  opacity: 0;  
+  transition: opacity 0.3s ease;
+}
+
+.lab-card:hover::before {  
+  opacity: 1;
+}
+
+.experiment-visual {  
+  height: 200px;  
+  margin: -2rem -2rem 2rem;  
+  background: rgba(0,0,0,0.2);  
+  position: relative;  
+  overflow: hidden;  
+  width: 100%;
+}
+
+.data-stream {  
+  position: absolute;  
+  top: 0;  
+  left: 0;  
+  width: 100%;  
+  height: 100%;  
+  background:   
+    linear-gradient(90deg,    
+      transparent 50%,    
+      rgba(135,226,223,0.05) 50    
+    );  
+  background-size: 4px 100%;  
+  animation: dataFlow 20s linear infinite;
+}
+
+@keyframes dataFlow {  
+  from { 
+    transform: translateX(0); 
+  }  
+  to { 
+    transform: translateX(-4px); 
+  } 
+}
+
+.metric-ring {  
+  position: absolute;  
+  top: 50%;  
+  left: 50%;  
+  transform: translate(-50%, -50%);
+}
+
+.pulse-ring {  
+  stroke: var(--neon-blue);  
+  stroke-width: 2;  
+  fill: none;  
+  r: 20;  
+  transform-origin: center;  
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {  
+  0% { 
+    r: 20; 
+    stroke-opacity: 1; 
+  }  
+  100% { 
+    r: 40; 
+    stroke-opacity: 0; 
+  } 
+}
+
+.scrolling-cta {  
+  position: relative;  
+  padding: 6rem 2rem;  
+  background: var(--deep-purple);  
+  overflow: hidden;  
+  color: var(--text-light);
+}
+
+.cta-container {  
+  max-width: 800px;  
+  margin: 0 auto;  
+  position: relative;
+}
+
+.cta-content {  
+  text-align: center;  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;  
+  gap: 2rem;
+}
+
+.cta-icon {  
+  width: 120px;  
+  height: 120px;  
+  margin-bottom: 2rem;
+}
+
+.network-icon {  
+  width: 100%;  
+  height: 100%;  
+  color: var(--highlight);
+}
+
+.node {  
+  animation: pulseNode 3s ease-in-out infinite;
+}
 
 .node-1 { animation-delay: 0s; } 
 .node-2 { animation-delay: 0.5s; } 
 .node-3 { animation-delay: 1s; } 
 .node-4 { animation-delay: 1.5s; }
 
-.connection-path {  opacity: 0.8;  animation: glowPath 2s ease-in-out infinite;}
+.connection-path {  
+  opacity: 0.8;  
+  animation: glowPath 2s ease-in-out infinite;
+}
 
-.neural-path {  opacity: 0.6;  animation: flowPath 3s linear infinite;}
+.neural-path {  
+  opacity: 0.6;  
+  animation: flowPath 3s linear infinite;
+}
 
-@keyframes pulseNode {  0%, 100% { opacity: 0.6; transform: scale(1); }  50% { opacity: 1; transform: scale(1.1); } }
+@keyframes pulseNode {  
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1); 
+  }  
+  50% { 
+    opacity: 1; 
+    transform: scale(1.1); 
+  } 
+}
 
-@keyframes glowPath {  0%, 100% { opacity: 0.6; }  50% { opacity: 1; } }
+@keyframes glowPath {  
+  0%, 100% { 
+    opacity: 0.6; 
+  }  
+  50% { 
+    opacity: 1; 
+  } 
+}
 
-@keyframes flowPath {  0% { stroke-dashoffset: 1000; }  100% { stroke-dashoffset: 0; } }
+@keyframes flowPath {  
+  0% { 
+    stroke-dashoffset: 1000; 
+  }  
+  100% { 
+    stroke-dashoffset: 0; 
+  } 
+}
 
-.cta-content h2 {  font-size: 3rem;  background: linear-gradient(45deg, var(--highlight), #ffffff);  -webkit-background-clip: text;  -webkit-text-fill-color: transparent;  margin-bottom: 1rem;}
+.cta-content h2 {  
+  font-size: 3rem;  
+  background: linear-gradient(45deg, var(--highlight), #ffffff);  
+  -webkit-background-clip: text;  
+  -webkit-text-fill-color: transparent;  
+  margin-bottom: 1rem;
+}
 
-.cta-content p {  font-size: 1.25rem;  color: rgba(255, 255, 255, 0.8);  margin-bottom: 2rem;}
+.cta-content p {  
+  font-size: 1.25rem;  
+  color: rgba(255, 255, 255, 0.8);  
+  margin-bottom: 2rem;
+}
 
-.follow-link {  display: flex;  align-items: center;  gap: 1rem;  padding: 1rem 2.5rem;  background: linear-gradient(45deg, var(--highlight), var(--neon-blue));  border: none;  border-radius: 50px;  color: var(--text-light);  font-size: 1.2rem;  font-weight: 600;  text-decoration: none;  transition: all 0.3s ease;}
+.follow-link {  
+  display: flex;  
+  align-items: center;  
+  gap: 1rem;  
+  padding: 1rem 2.5rem;  
+  background: linear-gradient(45deg, var(--highlight), var(--neon-blue));  
+  border: none;  
+  border-radius: 50px;  
+  color: var(--text-light);  
+  font-size: 1.2rem;  
+  font-weight: 600;  
+  text-decoration: none;  
+  transition: all 0.3s ease;
+}
 
-.follow-link:hover {  transform: translateY(-2px);  box-shadow: 0 8px 20px rgba(0,0,0,0.3);}
+.follow-link:hover {  
+  transform: translateY(-2px);  
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
 
-.arrow-icon {  width: 24px;  height: 24px;  stroke-width: 2;  transition: transform 0.3s ease;}
+.arrow-icon {  
+  width: 24px;  
+  height: 24px;  
+  stroke-width: 2;  
+  transition: transform 0.3s ease;
+}
 
-.follow-link:hover .arrow-icon {  transform: translateX(5px);}
+.follow-link:hover .arrow-icon {  
+  transform: translateX(5px);
+}
 
-#tools, #philosophy {  min-height: 100vh;  padding: 6rem 2rem;  background: var(--deep-purple);  position: relative;  z-index: 1;}
+.tools-grid {  
+  display: grid;  
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  
+  gap: 2rem;  
+  margin-top: 2rem;  
+  margin: 2rem 0;
+}
 
-.section-content {  max-width: 1200px;  margin: 0 auto;}
+.mastery-card {  
+  background: rgba(255,255,255,0.05);  
+  border: 1px solid rgba(200,200,200,0.1);  
+  border-radius: 15px;  
+  padding: 2rem;  
+  opacity: 0;  
+  transform: translateY(20px);  
+  animation: fadeUp 0.8s ease forwards;  
+  animation-delay: var(--delay, 0s);
+}
 
-.tools-grid {  display: grid;  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  gap: 2rem;  margin-top: 3rem;}
+.mastery-card:nth-child(2) {  
+  --delay: 0.2s; 
+}
 
-.tool-card {  background: rgba(255,255,255,0.05);  border: 1px solid rgba(200,200,200,0.1);  border-radius: 15px;  padding: 2rem;  transition: all 0.3s ease;  backdrop-filter: blur(10px);}
+.mastery-card h4 {  
+  color: var(--highlight);  
+  margin-bottom: 1rem;
+}
 
-.tool-card:hover {  transform: translateY(-5px);  background: rgba(255,255,255,0.08);  border-color: var(--highlight);}
+.mastery-card ul {  
+  list-style: none;  
+  padding: 0;
+}
 
-.tool-card h3 {  color: var(--highlight);  margin-bottom: 1rem;  font-size: 1.5rem;}
+.mastery-card li {  
+  color: var(--text-light);  
+  margin-bottom: 0.5rem;  
+  padding-left: 1.5rem;  
+  position: relative;
+}
 
-.tool-card p {  color: var(--text-light);  line-height: 1.6;}
+.mastery-card li:before {  
+  content: '▹';  
+  position: absolute;  
+  left: 0;  
+  color: var(--highlight);
+}
 
-.philosophy-content {  display: grid;  grid-template-columns: 1.5fr 1fr;  gap: 4rem;  margin-top: 3rem;}
+.philosophy-core ul {  
+  list-style: none;  
+  padding: 0;
+}
 
-.journey-timeline {  display: flex;  flex-direction: column;  gap: 2rem;}
+.philosophy-core li {  
+  color: var(--text-light);  
+  margin-bottom: 1rem;  
+  padding-left: 1.5rem;  
+  position: relative;
+}
 
-.mastery-grid {  display: grid;  grid-template-columns: repeat(2, 1fr);  gap: 2rem;  margin: 2rem 0;}
+.philosophy-core li:before {  
+  content: '▹';  
+  position: absolute;  
+  left: 0;  
+  color: var(--highlight);
+}
 
-.mastery-card {  background: rgba(255,255,255,0.05);  border: 1px solid rgba(200,200,200,0.1);  border-radius: 15px;  padding: 2rem;  opacity: 0;  transform: translateY(20px);  animation: fadeUp 0.8s ease forwards;  animation-delay: var(--delay, 0s);}
+.learning-cycle-diagram {  
+  width: 100%;  
+  max-width: 400px;  
+  margin: 0 auto;  
+  transform: rotate(360deg);  
+  transition: transform 20s linear infinite;
+}
 
-.mastery-card:nth-child(2) {  --delay: 0.2s; }
+.learning-cycle-diagram:hover {  
+  animation-play-state: paused;
+}
 
-.mastery-card h4 {  color: var(--highlight);  margin-bottom: 1rem;}
+@keyframes rotate {  
+  from { 
+    transform: rotate(0deg); 
+  }  
+  to { 
+    transform: rotate(360deg); 
+  } 
+}
 
-.mastery-card ul {  list-style: none;  padding: 0;}
+@media (max-width: 1024px) {  
+  .philosophy-content {    
+    grid-template-columns: 1fr;  
+  }   
+  .timeline-content {    
+    width: 90%;  
+  }   
+  .learning-cycle-diagram {    
+    max-width: 300px;  
+  }
+}
 
-.mastery-card li {  color: var(--text-light);  margin-bottom: 0.5rem;  padding-left: 1.5rem;  position: relative;}
+@media (max-width: 768px) {  
+  .cta-content h2 {    
+    font-size: 2rem;  
+  }   
+  .cta-content p {    
+    font-size: 1rem;  
+  }   
+  .follow-link {    
+    font-size: 1rem;    
+    padding: 0.8rem 1.6rem;  
+  }   
+  .mastery-grid {    
+    grid-template-columns: 1fr;  
+  }
+}
 
-.mastery-card li:before {  content: '▹';  position: absolute;  left: 0;  color: var(--highlight);}
+/* Services Grid Styles */
+.services-grid {  
+  display: grid;  
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  
+  gap: 2rem;  
+  margin-top: 4rem;  
+  width: 100%;  
+  place-items: center;  
+  justify-content: center;
+}
 
-.philosophy-core ul {  list-style: none;  padding: 0;}
+.service-tile {  
+  position: relative;  
+  overflow: hidden;  
+  background: rgba(255,255,255,0.05);  
+  padding: 2rem;  
+  border-radius: 15px;  
+  backdrop-filter: blur(10px);  
+  transform: translateY(50px);  
+  opacity: 0;  
+  animation: fadeUp 0.8s ease forwards;  
+  border: 1px solid rgba(200,200,200,0.1);  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);  
+  color: var(--text-light);  
+  text-align: center;  
+}
 
-.philosophy-core li {  color: var(--text-light);  margin-bottom: 1rem;  padding-left: 1.5rem;  position: relative;}
+.service-tile i {  
+  font-size: 2rem;  
+  color: var(--highlight);  
+  margin-bottom: 1rem;  
+}
 
-.philosophy-core li:before {  content: '▹';  position: absolute;  left: 0;  color: var(--highlight);}
+.service-tile h3 {  
+  font-size: 1.5rem;  
+  margin-bottom: 1rem;  
+  color: var(--text-light);
+}
 
-.learning-cycle-diagram {  transform: rotate(360deg);  transition: transform 20s linear infinite;}
+.service-tile p {  
+  font-size: 1rem;  
+  color: rgba(255,255,255,0.8);  
+  margin-bottom: 1rem;
+}
 
-.learning-cycle-diagram:hover {  animation-play-state: paused;}
+.service-tile .learning-stage {  
+  font-size: 0.9rem;  
+  color: #87e2df;  
+  font-weight: 500;
+}
 
-@keyframes rotate {  from { transform: rotate(0deg); }  to { transform: rotate(360deg); } }
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
 
-@media (max-width: 768px) {  .cta-content h2 {    font-size: 2rem;  }   .cta-content p {    font-size: 1rem;  }   .follow-link {    font-size: 1rem;    padding: 0.8rem 1.6rem;  }}</style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&amp;display=swap" rel="stylesheet"><script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script></head><body>
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--surface-dark);
+  padding: 2rem;
+  border-radius: 15px;
+  width: 90%;
+  height: 90%;
+  max-width: 1600px;
+  max-height: 900px;
+  position: relative;
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-light);
+}
+
+.modal-body iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 10px;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--highlight);
+}
+
+.modal-navigation {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.modal-content:hover .modal-navigation {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-navigation button {
+  padding: 0.5rem 1.5rem;
+  background: var(--highlight);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: background 0.3s ease;
+}
+
+.modal-navigation button:hover {
+  background: #5dd1c1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px); }
+  to { transform: translateY(0); }
+}
+
+.tool-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+#prevProject:hover,
+#nextProject:hover {
+  background: #5dd1c1;
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
 
 <div class="parallax-bg"></div>
 <div class="scroll-lines"></div>
 
 <div class="hero section">
-  <div class="neural-particles" id="particles"></div>
-  
-  <svg class="neural-grid" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-        <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(74,144,226,0.2)" stroke-width="1"></path>
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#grid)"></rect>
-  </svg>
-
-  <div class="content" style="text-align: center; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; max-width: 1200px; padding: 2rem;">
-    <h1 class="floating" data-text="TeachOneself">TeachOneself</h1>
-    <p class="tagline">Your Journey to Mastery Through Self-Directed Learning</p>
+    <div class="neural-particles" id="particles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; cursor: crosshair; display: flex; align-items: center; justify-content: center;"><canvas class="particles-js-canvas-el" width="1678" height="1234" style="width: 100%; height: 100%;"></canvas></div>
     
-    <div class="features">
-      <div class="feature-card">
-        <h3>Learning Framework</h3>
-        <p>Research-backed methodologies for effective self-directed learning and skill acquisition</p>
-      </div>
-      
-      <div class="feature-card">
-        <h3>Community Hub</h3>
-        <p>Connect with fellow autodidacts, share resources, and grow together</p>
-      </div>
-      
-      <div class="feature-card">
-        <h3>Consulting Services</h3>
-        <p>Expert guidance on curriculum design and learning optimization</p>
-      </div>
-    </div>
+    <svg class="neural-grid" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(74,144,226,0.2)" stroke-width="1"></path>
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)"></rect>
+    </svg>
 
-    <a href="https://github.com/neural-nexus/framework" class="cta-button">Explore Framework</a>
-</div>
+    <div class="content">
+        <!-- Header Section -->
+        <div class="header-section">
+            <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin-right: 1rem;">
+                <!-- Stylized Lightbulb with Arrow -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--highlight)"></polygon>
+                    </marker>
+                </defs>
+                <path d="M50 10 C65 10, 80 25, 80 40 C80 55, 65 70, 50 70 C35 70,20 55,20 40 C20 25,35 10,50 10 Z" fill="none" stroke="var(--highlight)" stroke-width="5"></path>
+                <path d="M50 70 L50 90" stroke="var(--highlight)" stroke-width="5" marker-end="url(#arrowhead)"></path>
+            </svg>
+            <span style="font-family: 'Inter', sans-serif; font-size: 2rem; color: var(--text-light);">TeachOneself.com</span>
+        </div>
+        
+        <!-- Tagline -->
+        <p class="tagline">Elevate Your Digital Presence &amp; Learning Trajectory</p>
+        
+        <!-- Hero Section -->
+        <h2>Transform Your Professional &amp; Personal Growth</h2>
+        <h3>Expert Digital Marketing Strategies &amp; Self-Learning Mentorship with Zachary Bennett</h3>
+        <p style="font-size: 1rem; max-width: 600px; margin: 0 auto 2rem;">Accelerate your career and amplify your knowledge with TeachOneself.com. As your trusted consultant, Zachary Bennett provides bespoke digital marketing solutions and personalized self-learning guidance, empowering you to thrive in the digital age.</p>
+        
+        <!-- Call-to-Action (CTA) Button -->
+        <a href="https://example.com/discover-your-customized-path" class="cta-button">Discover Your Customized Path</a>
+    </div>
 </div>
 
 <div class="innovation-section section">
-  <div class="scroll-grid">
-    <div class="grid-line"></div>
-    <div class="grid-content">
-      <h2 class="section-title">Transformative Technology</h2>
-      <div class="innovation-grid">
-        <div class="grid-item" data-aos="fade-up">
-          <div class="stat-circle">
-            <span class="stat-number">10k+</span>
-          </div>
-          <h3>Active Learners</h3>
-          <p>Building skills through self-directed learning</p>
+    <section id="services">
+        <h2>Holistic Support for Ambitious Individuals</h2>
+        <h3>Where Digital Marketing Meets Effective Self-Directed Learning</h3>
+        <div class="services-grid">
+            <div class="service-tile" style="opacity: 0; transform: translateY(50px);">
+                <i class="fas fa-rocket"></i>  
+                <h3 class="service-title">Digital Marketing Strategy</h3> 
+                <p class="service-description">Elevate your online presence with a data-driven approach. We'll help you define your target audience, craft compelling messaging, and select the right channels for maximum impact.</p>
+                <p class="learning-stage">Exploration (Identify Your Digital Footprint)</p> 
+            </div>
+            <div class="service-tile" style="opacity: 0; transform: translateY(50px);">
+                <i class="fas fa-user-graduate"></i> 
+                <h3 class="service-title">Self-Learning Mentorship</h3> 
+                <p class="service-description">Master new skills with personalized guidance and support. We'll help you create a structured learning plan, overcome challenges, and stay motivated throughout your journey.</p> 
+                <p class="learning-stage">Engagement (Deep Dive into Digital Marketing)</p> 
+            </div>
+            <div class="service-tile" style="opacity: 0; transform: translateY(50px);">
+                <i class="fas fa-graduation-cap"></i> 
+                <h3 class="service-title">Curriculum Design &amp; Learning Optimization</h3> 
+                <p class="service-description">Refine your skills and create impactful learning experiences for others. We'll guide you through curriculum development best practices, incorporating the latest learning science principles.</p> 
+                <p class="learning-stage">Mastery (Lead in Digital Marketing)</p> 
+            </div>
         </div>
-        
-        <div class="grid-item" data-aos="fade-up" data-aos-delay="100">
-          <div class="stat-circle">
-            <span class="stat-number">500+</span>
-          </div>
-          <h3>Learning Paths</h3>
-          <p>Curated curriculum guides across disciplines</p>
-        </div>
-      </div>
-    </div>
-  </div>
+        <a href="https://example.com/explore-services" class="cta-button">Explore Services in Depth</a>
+    </section>
 </div>
 
 <div class="solutions-section section">
-  <div class="solutions-grid">
-    <h2 class="section-title">Intelligent Solutions</h2>
-    
-    <div class="solutions-container">
-      <div class="solution-card">
-        <h3>Learning Science</h3>
-        <p>Research-backed approaches to metacognition and skill acquisition</p>
+    <div class="solutions-grid" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 2rem;">
+    <h2 class="section-title">Grow with Our Community &amp; Access Valuable Resources</h2>
+    <h3 class="subheader">Connect, Learn, and Thrive in Digital Marketing and Self-Directed Learning</h3>
+    <div class="resource-highlights" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; width: 100%;">
+      <div class="highlight-item">
+        <h4>Expert Webinars</h4>
+        <p>Regular Sessions on Digital Marketing &amp; Learning Strategies</p>
       </div>
-
-      <div class="solution-card">
-        <h3>Community Platform</h3>
-        <p>Tools for collaboration, accountability, and peer learning</p>
+      <div class="highlight-item">
+        <h4>Community Forum</h4>
+        <p>Connect with Peers, Share Resources, and Get Support</p>
       </div>
-
-      <div class="solution-card">
-        <h3>Resource Library</h3>
-        <p>Curated collection of learning materials, tools, and frameworks</p>
+      <div class="highlight-item">
+        <h4>Curated Resource Library</h4>
+        <p>Tools, Frameworks, and Insights for Continuous Learning</p>
       </div>
     </div>
+    <a href="https://example.com/join-community" class="cta-button" style="margin-top: 2rem;">Join Our Community &amp; Access Resources</a>
   </div>
 </div>
 
 <div class="case-studies-section section">
-  <div class="case-studies-container">
-    <h2 class="section-title">Success Stories</h2>
+    <div class="case-studies-container">
+    <h2 class="section-title">Tools I've Built From Self-Directed Learning</h2>
+    <div class="tools-grid">
+      <div class="tool-card" data-index="0" onclick="openModal(0)" style="cursor: pointer; transition: transform 0.3s ease; position: relative; overflow: hidden;">
+        <div class="tool-card-content" style="position: relative; z-index: 1;">
+          <h3>AI Automatic Book Formatter</h3>
+          <p>Transform your manuscripts effortlessly with our AI-powered formatting tool, ensuring consistency and professionalism in every page.</p>
+        </div>
+        <svg class="tool-card-overlay" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 200 200" style="position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s ease;">
+          <rect width="200" height="200" fill="rgba(135,226,223,0.1)">
+            <animate attributeName="opacity" from="0" to="0.3" begin="mouseover" dur="0.3s" fill="freeze"></animate>
+            <animate attributeName="opacity" from="0.3" to="0" begin="mouseout" dur="0.3s" fill="freeze"></animate>
+          </rect>
+        </svg>
+      </div>
+      <div class="tool-card" data-index="1" onclick="openModal(1)" style="cursor: pointer; transition: transform 0.3s ease; position: relative; overflow: hidden;">
+        <div class="tool-card-content" style="position: relative; z-index: 1;">
+          <h3>AI Powered Research Generator</h3>
+          <p>Generate comprehensive research summaries and insights seamlessly, powered by advanced AI algorithms.</p>
+        </div>
+        <svg class="tool-card-overlay" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 200 200" style="position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s ease;">
+          <circle cx="100" cy="100" r="50" fill="rgba(135,226,223,0.1)">
+            <animate attributeName="opacity" from="0" to="0.3" begin="mouseover" dur="0.3s" fill="freeze"></animate>
+            <animate attributeName="opacity" from="0.3" to="0" begin="mouseout" dur="0.3s" fill="freeze"></animate>
+          </circle>
+        </svg>
+      </div>
+      <div class="tool-card" data-index="2" onclick="openModal(2)" style="cursor: pointer; transition: transform 0.3s ease; position: relative; overflow: hidden;">
+        <div class="tool-card-content" style="position: relative; z-index: 1;">
+          <h3>Intelligent Font Pairing</h3>
+          <p>Automatically pair fonts that complement each other, creating visually appealing and harmonious text layouts.</p>
+        </div>
+        <svg class="tool-card-overlay" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 200 200" style="position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s ease;">
+          <polygon points="0,100 200,0 200,200" fill="rgba(135,226,223,0.1)">
+            <animate attributeName="opacity" from="0" to="0.3" begin="mouseover" dur="0.3s" fill="freeze"></animate>
+            <animate attributeName="opacity" from="0.3" to="0" begin="mouseout" dur="0.3s" fill="freeze"></animate>
+          </polygon>
+        </svg>
+      </div>
+      <div class="tool-card" data-index="3" onclick="openModal(3)" style="cursor: pointer; transition: transform 0.3s ease; position: relative; overflow: hidden;">
+        <div class="tool-card-content" style="position: relative; z-index: 1;">
+          <h3>AI Powered Landing Page Critiquer</h3>
+          <p>Receive AI-driven feedback and optimization suggestions to enhance your landing pages for better conversions.</p>
+        </div>
+        <svg class="tool-card-overlay" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 200 200" style="position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s ease;">
+          <line x1="0" y1="0" x2="200" y2="200" stroke="rgba(135,226,223,0.1)" stroke-width="2">
+            <animate attributeName="opacity" from="0" to="0.3" begin="mouseover" dur="0.3s" fill="freeze"></animate>
+            <animate attributeName="opacity" from="0.3" to="0" begin="mouseout" dur="0.3s" fill="freeze"></animate>
+          </line>
+        </svg>
+      </div>
+    </div>
     
-    <div class="case-studies-grid">
-      <div class="case-study-card">
-        <h3>Career Transitions</h3>
-        <p>How self-learners successfully switched industries</p>
-        <div class="metrics">
-          <div class="metric">
-            <span class="metric-value">94%</span>
-            <span class="metric-label">Success Rate</span>
-          </div>
+    <!-- Fullscreen Modal -->
+    <div class="modal" id="fullscreenModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 1000;">
+      <div class="modal-content" style="position: relative; width: 90%; height: 90%; background: #1a1a1a; border-radius: 15px; overflow: hidden;">
+        <span class="close-button" style="position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; cursor: pointer; color: var(--highlight);">×</span>
+        <div class="modal-body" style="width: 100%; height: 100%;">
+          <h2 id="modalTitle" style="color: #87e2df; text-align: center; margin-bottom: 1rem;"></h2>
+          <iframe id="modalIframe" src="" frameborder="0" style="width: 100%; height: 80%; border-radius: 10px;"></iframe>
+        </div>
+        <div class="modal-navigation" style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s ease; display: flex; gap: 1rem; pointer-events: none;">
+          <button id="prevProject" style="padding: 0.5rem 1.5rem; background: #87e2df; border: none; border-radius: 5px; cursor: pointer; color: #1a1a1a; transition: background 0.3s ease;">Previous</button>
+          <button id="nextProject" style="padding: 0.5rem 1.5rem; background: #87e2df; border: none; border-radius: 5px; cursor: pointer; color: #1a1a1a; transition: background 0.3s ease;">Next</button>
         </div>
       </div>
     </div>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Modal Functionality
+        const toolCards = document.querySelectorAll('.tool-card');
+        const modal = document.getElementById('fullscreenModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalIframe = document.getElementById('modalIframe');
+        const closeButton = document.querySelector('.close-button');
+        const prevButton = document.getElementById('prevProject');
+        const nextButton = document.getElementById('nextProject');
+        
+        const projects = [
+          {
+            title: "AI Automatic Book Formatter",
+            iframeSrc: "https://example.com/book-formatter"
+          },
+          {
+            title: "AI Powered Research Generator",
+            iframeSrc: "https://example.com/research-generator"
+          },
+          {
+            title: "Intelligent Font Pairing",
+            iframeSrc: "https://example.com/font-pairing"
+          },
+          {
+            title: "AI Powered Landing Page Critiquer",
+            iframeSrc: "https://example.com/landing-page-critiquer"
+          }
+        ];
+        
+        let currentIndex = 0;
+        
+        toolCards.forEach((card, index) => {
+          card.addEventListener('click', () => {
+            currentIndex = index;
+            openModal(currentIndex);
+          });
+        });
+        
+        function openModal(index) {
+          modalTitle.textContent = projects[index].title;
+          modalIframe.src = projects[index].iframeSrc;
+          modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+          modal.style.display = 'none';
+          modalIframe.src = "";
+        }
+        
+        closeButton.addEventListener('click', closeModal);
+        
+        window.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+        
+        prevButton.addEventListener('click', () => {
+          currentIndex = (currentIndex - 1 + projects.length) % projects.length;
+          openModal(currentIndex);
+        });
+        
+        nextButton.addEventListener('click', () => {
+          currentIndex = (currentIndex + 1) % projects.length;
+          openModal(currentIndex);
+        });
+        
+        // Ensure the iframe resizes properly
+        window.addEventListener('resize', () => {
+          const iframe = document.getElementById('modalIframe');
+          if (iframe) {
+            iframe.style.height = modal.clientHeight - 60 + 'px'; // Adjust as needed
+          }
+        });
+        
+        // Enhance modal navigation visibility on hover
+        const modalContent = document.querySelector('.modal-content');
+        modalContent.addEventListener('mouseover', () => {
+          document.querySelector('.modal-navigation').style.opacity = '1';
+          document.querySelector('.modal-navigation').style.pointerEvents = 'auto';
+        });
+        modalContent.addEventListener('mouseout', () => {
+          document.querySelector('.modal-navigation').style.opacity = '0';
+          document.querySelector('.modal-navigation').style.pointerEvents = 'none';
+        });
+      });
+    </script>
   </div>
 </div>
 
 <div class="timeline-section section">
-  <h2 class="section-title">Evolution &amp; Milestones</h2>
-  
-  <div class="timeline-container">
-    <div class="timeline-track"></div>
+    <h2 class="section-title">Professional Journey Timeline</h2>
     
-    <div class="timeline-item" data-year="2023">
-      <div class="timeline-content">
-        <div class="timeline-date">2023</div>
-        <h3>Learning Science Research</h3>
-        <p>Published findings on accelerated skill acquisition</p>
-      </div>
-    </div>
+    <div class="timeline-container">
+        <div class="timeline-track"></div>
+        
+        <div class="timeline-item" data-year="1997">
+            <div class="timeline-content">
+                <div class="timeline-date">1997 (Age 10)</div>
+                <h3>First Steps into Technology</h3>
+                <p>Acquired first computer and took initial steps into the world of technology.</p>
+            </div>
+        </div>
 
-    <div class="timeline-item" data-year="2022">
-      <div class="timeline-content">
-        <div class="timeline-date">2022</div>
-        <h3>Community Platform Launch</h3>
-        <p>Built and scaled learning community to 10,000+ members</p>
-      </div>
+        <div class="timeline-item" data-year="1998">
+            <div class="timeline-content">
+                <div class="timeline-date">1998 (Age 11)</div>
+                <h3>First Programming Experiences</h3>
+                <p>Engaged with Visual Basic programming, created first HTML page, developed CGI scripts, and began 3D design with Bryce 3D.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-year="2000">
+            <div class="timeline-content">
+                <div class="timeline-date">2000 (Age 12)</div>
+                <h3>Early Entrepreneurial Exploration</h3>
+                <p>Launched first email and affiliate marketing campaigns, delving into the basics of entrepreneurship.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-year="2001">
+            <div class="timeline-content">
+                <div class="timeline-date">2001 (Age 14)</div>
+                <h3>Web Design and Photoshop Skills</h3>
+                <p>Designed website for online graffiti supply shop "ToolZ of The Trade", created first Photoshop designs, and showcased early web design proficiency.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-year="2002">
+            <div class="timeline-content">
+                <div class="timeline-date">2002 (Age 15)</div>
+                <h3>Deepening Interest in Marketing</h3>
+                <p>Developed a profound interest in marketing and search algorithms, and began exploring digital strategy mechanisms.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-year="2003">
+            <div class="timeline-content">
+                <div class="timeline-date">2003 (Age 16)</div>
+                <h3>Founding Transcend Imaging</h3>
+                <p>Founded first online business, Transcend Imaging, specializing in image restoration and artifact removal, demonstrating technical and entrepreneurial capabilities.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-year="2005">
+            <div class="timeline-content">
+                <div class="timeline-date">2005</div>
+                <h3>Expanding Skill Set</h3>
+                <p>Started learning CSS, PHP, and JavaScript. Studied psychology, social engineering, and propaganda, expanding interdisciplinary knowledge base.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-year="2008">
+            <div class="timeline-content">
+                <div class="timeline-date">2008</div>
+                <h3>Advanced Development Skills</h3>
+                <p>Learned API development and full-stack development skills. Began writing poetry and continued multidisciplinary learning.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-year="2010">
+            <div class="timeline-content">
+                <div class="timeline-date">2010</div>
+                <h3>Documenting Learning Framework</h3>
+                <p>Reflected on self-learning methodology, started documenting personal learning framework, and conceived a potential book concept about accelerated learning.</p>
+            </div>
+        </div>
+        
+        <!-- To Be Continued -->
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>To Be Continued...</h3>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="cta-section section">
-  <div class="neural-grid-overlay"></div>
-  <h2 class="section-title">Join the Learning Revolution</h2>
-  
-  <div class="cta-container">
-    <form id="neural-form" class="neural-form">
-      <div class="input-wrapper">
-        <input type="email" id="email" required="" placeholder="Your Email">
-        <div class="input-focus-effect"></div>
-      </div>
-
-      <div class="input-wrapper">
-        <input type="text" id="goals" required="" placeholder="Learning Goals">
-        <div class="input-focus-effect"></div>
-      </div>
-
-      <div class="submit-container">
-        <button type="submit" class="neural-submit">
-          <span class="button-text">Start Your Journey</span>
-          <div class="button-effects">
-            <div class="effect-1"></div>
-            <div class="effect-2"></div>
-            <div class="effect-3"></div>
-          </div>
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<div class="insights-section section">
-  <div class="neural-insights-container">
-    <h2 class="section-title">Neural Insights</h2>
-    <div class="neural-pulse">
-      <svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="none">
-        <defs>
-          <radialGradient id="pulseGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-            <stop offset="0%" style="stop-color:var(--neon-blue);stop-opacity:0.1"></stop>
-            <stop offset="50%" style="stop-color:var(--neon-blue);stop-opacity:0.05"></stop>
-            <stop offset="100%" style="stop-color:var(--neon-blue);stop-opacity:0"></stop>
-          </radialGradient>
-          
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"></feGaussianBlur>
-            <feMerge>
-              <feMergeNode in="coloredBlur"></feMergeNode>
-              <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-          </filter>
-        </defs>
-
-        <circle class="pulse-circle" cx="50" cy="50" r="5" fill="none" stroke="url(#pulseGradient)">
-          <animate attributeName="r" from="5" to="50" dur="3s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" from="0.6" to="0" dur="3s" repeatCount="indefinite"></animate>
-        </circle>
-
-        <circle class="pulse-circle" cx="50" cy="50" r="5" fill="none" stroke="url(#pulseGradient)">
-          <animate attributeName="r" from="5" to="50" dur="3s" begin="1s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" from="0.6" to="0" dur="3s" begin="1s" repeatCount="indefinite"></animate>
-        </circle>
-
-        <circle class="pulse-circle" cx="50" cy="50" r="5" fill="none" stroke="url(#pulseGradient)">
-          <animate attributeName="r" from="5" to="50" dur="3s" begin="2s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" from="0.6" to="0" dur="3s" begin="2s" repeatCount="indefinite"></animate>
-        </circle>
-
-        <g class="neural-nodes" filter="url(#glow)">
-          <circle cx="20" cy="30" r="2" fill="#c0c0c0">
-            <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"></animate>
-          </circle>
-          <circle cx="80" cy="70" r="2" fill="#c0c0c0">
-            <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"></animate>
-          </circle>
-          <circle cx="60" cy="20" r="2" fill="#c0c0c0">
-            <animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"></animate>
-          </circle>
-          <circle cx="40" cy="80" r="2" fill="#c0c0c0">
-            <animate attributeName="opacity" values="0.3;1;0.3" dur="2.2s" repeatCount="indefinite"></animate>
-          </circle>
-        </g>
-
-        <g class="neural-connections" stroke="#c0c0c0" stroke-width="0.5" opacity="0.3">
-          <line x1="20" y1="30" x2="60" y2="20">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="3s" repeatCount="indefinite"></animate>
-          </line>
-          <line x1="60" y1="20" x2="80" y2="70">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.5s" repeatCount="indefinite"></animate>
-          </line>
-          <line x1="80" y1="70" x2="40" y2="80">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.8s" repeatCount="indefinite"></animate>
-          </line>
-          <line x1="40" y1="80" x2="20" y2="30">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.2s" repeatCount="indefinite"></animate>
-          </line>
-        </g>
-
-        <circle cx="50" cy="50" r="3" fill="#FFA45C" filter="url(#glow)">
-          <animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"></animate>
-        </circle>
-      </svg>
-    </div>
-    <canvas class="neural-connections" id="connectionsCanvas"></canvas>
+    <div class="neural-grid-overlay"></div>
+    <h2 class="section-title">Join the Learning Revolution</h2>
     
-    <div class="insight-nodes">
-      <div class="insight-node">
-        <div class="insight-type">Learning Research</div>
-        <p>"Metacognition and spaced repetition are key drivers of successful self-directed learning"</p>
-      </div>
-      
-      <div class="insight-node">
-        <div class="insight-type">Community Impact</div>
-        <p>"Peer learning groups show 3x better retention rates than solo learners"</p>
-      </div>
+    <div class="cta-container">
+        <form id="neural-form" class="neural-form">
+            <div class="input-wrapper">
+                <input type="email" id="email" required="" placeholder="Your Email">
+                <label for="email">Your Email</label>
+                <div class="input-focus-effect"></div>
+            </div>
+    
+            <div class="input-wrapper">
+                <input type="text" id="goals" required="" placeholder="Learning Goals">
+                <label for="goals">Learning Goals</label>
+                <div class="input-focus-effect"></div>
+            </div>
+    
+            <div class="submit-container">
+                <button type="submit" class="neural-submit">
+                    <span class="button-text">Start Your Journey</span>
+                    <div class="button-effects">
+                        <div class="effect-1"></div>
+                        <div class="effect-2"></div>
+                        <div class="effect-3"></div>
+                    </div>
+                </button>
+            </div>
+        </form>
     </div>
-  </div>
 </div>
 
 <div class="innovation-lab-section">
-  <h2 class="section-title">Innovation Lab</h2>
-  
-  <div class="lab-grid">
-    <div class="lab-card">
-      <div class="experiment-visual">
-        <div class="data-stream"></div>
-        <svg class="metric-ring" width="100" height="100" viewBox="0 0 100 100">
-          <circle class="pulse-ring" cx="50" cy="50"></circle>
-          <circle class="pulse-ring" cx="50" cy="50" style="animation-delay: 0.5s"></circle>
-          <circle class="pulse-ring" cx="50" cy="50" style="animation-delay: 1s"></circle>
-        </svg>
-      </div>
-      <h3>Neural Network Training</h3>
-      <p>Real-time visualization of learning patterns and knowledge acquisition in self-directed learners.</p>
-    </div>
+    <h2 class="section-title">Innovation Lab</h2>
+    
+    <div class="lab-grid">
+        <div class="lab-card">
+            <div class="experiment-visual">
+                <div class="data-stream"></div>
+                <svg class="metric-ring" width="100" height="100" viewBox="0 0 100 100">
+                    <circle class="pulse-ring" cx="50" cy="50"></circle>
+                    <circle class="pulse-ring" cx="50" cy="50" style="animation-delay: 0.5s"></circle>
+                    <circle class="pulse-ring" cx="50" cy="50" style="animation-delay: 1s"></circle>
+                </svg>
+            </div>
+            <h3>Neural Network Training</h3>
+            <p>Real-time visualization of learning patterns and knowledge acquisition in self-directed learners.</p>
+        </div>
 
-    <div class="lab-card">
-      <div class="experiment-visual">
-        <div class="data-stream"></div>
-        <canvas id="skillGraph" width="300" height="200"></canvas>
-      </div>
-      <h3>Skill Development Analysis</h3>
-      <p>Advanced metrics tracking learning velocity and knowledge retention across different domains.</p>
-    </div>
+        <div class="lab-card">
+            <div class="experiment-visual">
+                <div class="data-stream"></div>
+                <canvas id="skillGraph" width="300" height="200"></canvas>
+            </div>
+            <h3>Skill Development Analysis</h3>
+            <p>Advanced metrics tracking learning velocity and knowledge retention across different domains.</p>
+        </div>
 
-    <div class="lab-card">
-      <div class="experiment-visual">
-        <div class="data-stream"></div>
-        <div id="learningPatterns"></div>
-      </div>
-      <h3>Learning Pattern Recognition</h3>
-      <p>AI-powered analysis of successful learning strategies and methodologies.</p>
+        <div class="lab-card">
+            <div class="experiment-visual">
+                <div class="data-stream"></div>
+                <div id="learningPatterns"></div>
+            </div>
+            <h3>Learning Pattern Recognition</h3>
+            <p>AI-powered analysis of successful learning strategies and methodologies.</p>
+        </div>
     </div>
-  </div>
 </div>
 
 <section class="scrolling-cta">
-  <div class="cta-container">
-    <div class="cta-content">
-      <div class="cta-icon">
-        <svg class="network-icon" viewBox="0 0 969 955" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle class="node node-1" cx="161.191" cy="320.191" r="133.191" stroke="currentColor" stroke-width="20"></circle>
-          <circle class="node node-2" cx="806.809" cy="320.191" r="133.191" stroke="currentColor" stroke-width="20"></circle>
-          <circle class="node node-3" cx="695.019" cy="587.733" r="31.4016" fill="currentColor"></circle>
-          <circle class="node node-4" cx="272.981" cy="587.733" r="31.4016" fill="currentColor"></circle>
-          <path class="connection-path" d="M564.388 712.083C564.388 743.994 526.035 779.911 483.372 779.911C440.709 779.911 402.356 743.994 402.356 712.083C402.356 680.173 440.709 664.353 483.372 664.353C526.035 664.353 564.388 680.173 564.388 712.083Z" fill="currentColor"></path>
-          <path class="neural-path" fill-rule="evenodd" clip-rule="evenodd" d="M745.643 288.24C815.368 344.185 854.539 432.623 854.539 511.741H614.938V454.652C614.938 433.113 597.477 415.652 575.938 415.652H388.37C366.831 415.652 349.37 433.113 349.37 454.652V511.741L110.949 511.741C110.949 432.623 150.12 344.185 219.845 288.24C289.57 232.295 384.138 200.865 482.744 200.865C581.35 200.865 675.918 232.295 745.643 288.24Z" fill="currentColor"></path>
-        </svg>
-      </div>
-      <h2>Ready to Transform Your Learning Journey?</h2>
-      <p>Join our community and start mastering new skills today!</p>
-      <a href="https://example.com/join" class="follow-link">
-        <span>Get Started</span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="arrow-icon">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-        </svg>
-      </a>
+    <div class="cta-container">
+        <div class="cta-content">
+            <div class="cta-icon">
+                <svg class="network-icon" viewBox="0 0 969 955" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="node node-1" cx="161.191" cy="320.191" r="133.191" stroke="currentColor" stroke-width="20"></circle>
+                    <circle class="node node-2" cx="806.809" cy="320.191" r="133.191" stroke="currentColor" stroke-width="20"></circle>
+                    <circle class="node node-3" cx="695.019" cy="587.733" r="31.4016" fill="currentColor"></circle>
+                    <circle class="node node-4" cx="272.981" cy="587.733" r="31.4016" fill="currentColor"></circle>
+                    <path class="connection-path" d="M564.388 712.083C564.388 743.994 526.035 779.911 483.372 779.911C440.709 779.911 402.356 743.994 402.356 712.083C402.356 680.173 440.709 664.353 483.372 664.353C526.035 664.353 564.388 680.173 564.388 712.083Z" fill="currentColor"></path>
+                    <path class="neural-path" fill-rule="evenodd" clip-rule="evenodd" d="M745.643 288.24C815.368 344.185 854.539 432.623 854.539 511.741H614.938V454.652C614.938 433.113 597.477 415.652 575.938 415.652H388.37C366.831 415.652 349.37 433.113 349.37 454.652V511.741L110.949 511.741C110.949 432.623 150.12 344.185 219.845 288.24C289.57 232.295 384.138 200.865 482.744 200.865C581.35 200.865 675.918 232.295 745.643 288.24Z" fill="currentColor"></path>
+                </svg>
+            </div>
+            <h2>Ready to Transform Your Learning Journey?</h2>
+            <p>Join our community and start mastering new skills today!</p>
+            <a href="https://example.com/join" class="follow-link">
+                <span>Get Started</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="arrow-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
+            </a>
+        </div>
     </div>
-  </div>
 </section>
-
-<div id="tools" class="section">
-  <h2 class="section-title">Tools for Learning</h2>
-  <div class="section-content">
-    <div class="tools-grid">
-      <div class="tool-card">
-        <h3>Learning Tracker</h3>
-        <p>A comprehensive tool to track your learning progress and milestones.</p>
-      </div>
-      <div class="tool-card">
-        <h3>Resource Organizer</h3>
-        <p>Organize your learning materials and resources efficiently.</p>
-      </div>
-      <div class="tool-card">
-        <h3>Skill Assessment</h3>
-        <p>Evaluate your skills through tailored assessments.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="philosophy" class="section">
-  <h2 class="section-title">Philosophy of Self-Directed Learning</h2>
-  <div class="section-content philosophy-content">
-    <div class="journey-timeline">
-      <h3>Your Learning Journey</h3>
-      <div class="mastery-grid">
-        <div class="mastery-card">
-          <h4>Stage 1: Exploration</h4>
-          <ul>
-            <li>Identify interests</li>
-            <li>Gather resources</li>
-          </ul>
-        </div>
-        <div class="mastery-card">
-          <h4>Stage 2: Engagement</h4>
-          <ul>
-            <li>Deep dive into subjects</li>
-            <li>Apply knowledge</li>
-          </ul>
-        </div>
-        <div class="mastery-card">
-          <h4>Stage 3: Mastery</h4>
-          <ul>
-            <li>Refine skills</li>
-            <li>Teach others</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="philosophy-core">
-      <h3>Core Principles</h3>
-      <ul>
-        <li>Autonomy in learning</li>
-        <li>Reflective practice</li>
-        <li>Continuous improvement</li>
-      </ul>
-    </div>
-    <div class="learning-cycle-diagram">
-      <img src="path/to/learning-cycle-diagram.png" alt="Learning Cycle Diagram" />
-    </div>
-  </div>
-</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  particlesJS('particles', {
-    particles: {
-      number: {
-        value: 60,
-        density: {
-          enable: true,
-          value_area: 1500
-        }
-      },
-      color: {
-        value: ['#87e2df', '#083d87', '#878094']
-      },
-      opacity: {
-        value: 0.3,
-        random: true
-      },
-      size: {
-        value: 1.5,
-        random: true
-      },
-      line_linked: {
-        enable: true,
-        distance: 150,
-        color: '#87e2df',
-        opacity: 0.2,
-        width: 0.8
-      },
-      move: {
-        enable: true,
-        speed: 2,
-        direction: 'none',
-        random: false,
-        straight: false,
-        out_mode: 'bounce',
-        bounce: true,
-        attract: {
-          enable: true,
-          rotateX: 600,
-          rotateY: 1200
-        }
-      }
-    },
-    interactivity: {
-      detect_on: 'canvas',
-      events: {
-        onhover: {
-          enable: true,
-          mode: ['grab', 'bubble']
+    particlesJS('particles', {
+        particles: {
+            number: {
+                value: 60,
+                density: {
+                    enable: true,
+                    value_area: 1500
+                }
+            },
+            color: {
+                value: ['#87e2df', '#083d87', '#878094']
+            },
+            opacity: {
+                value: 0.3,
+                random: true
+            },
+            size: {
+                value: 1.5,
+                random: true
+            },
+            line_linked: {
+                enable: true,
+                distance: 150,
+                color: '#87e2df',
+                opacity: 0.2,
+                width: 0.8
+            },
+            move: {
+                enable: true,
+                speed: 2,
+                direction: 'none',
+                random: false,
+                straight: false,
+                out_mode: 'bounce',
+                bounce: true,
+                attract: {
+                    enable: true,
+                    rotateX: 600,
+                    rotateY: 1200
+                }
+            }
         },
-        onclick: {
-          enable: true,
-          mode: 'push'
+        interactivity: {
+            detect_on: 'canvas',
+            events: {
+                onhover: {
+                    enable: true,
+                    mode: ['grab', 'bubble']
+                },
+                onclick: {
+                    enable: true,
+                    mode: 'push'
+                },
+                resize: true
+            },
+            modes: {
+                grab: {
+                    distance: 200,
+                    line_linked: {
+                        opacity: 0.8
+                    }
+                },
+                bubble: {
+                    distance: 200,
+                    size: 6,
+                    duration: 0.3,
+                    opacity: 0.8,
+                    speed: 3
+                },
+                push: {
+                    particles_nb: 4
+                }
+            }
         },
-        resize: true
-      },
-      modes: {
-        grab: {
-          distance: 200,
-          line_linked: {
-            opacity: 0.8
-          }
-        },
-        bubble: {
-          distance: 200,
-          size: 6,
-          duration: 0.3,
-          opacity: 0.8,
-          speed: 3
-        },
-        push: {
-          particles_nb: 4
-        }
-      }
-    },
-    retina_detect: true,
-    fps_limit: 60
-  });
-
-  const particlesContainer = document.querySelector('.neural-particles');
-  const canvas = document.querySelector('.particles-js-canvas-el');
-  
-  const createShockwave = (x, y) => {
-    const shockwave = document.createElement('div');
-    shockwave.style.cssText = `
-      position: absolute;
-      left: ${x}px;
-      top: ${y}px;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-      background: transparent;
-      border: 2px solid var(--neon-blue);
-      transform: translate(-50%, -50%);
-      animation: shockwave 1s ease-out forwards;
-    `;
-    particlesContainer.appendChild(shockwave);
-    setTimeout(() => shockwave.remove(), 1000);
-  };
-
-  const createEnergySpark = (x, y) => {
-    const spark = document.createElement('div');
-    const angle = Math.random() * Math.PI * 2;
-    const distance = Math.random() * 100 + 50;
-    spark.style.cssText = `
-      position: absolute;
-      left: ${x}px;
-      top: ${y}px;
-      width: 2px;
-      height: 10px;
-      background: var(--highlight);
-      transform: translate(-50%, -50%) rotate(${angle}rad);
-      filter: blur(1px);
-      animation: spark 0.6s ease-out forwards;
-    `;
-    particlesContainer.appendChild(spark);
-    setTimeout(() => spark.remove(), 600);
-  };
-
-  particlesContainer.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const trail = document.createElement('div');
-    trail.className = 'particle-trail';
-    trail.style.left = x + 'px';
-    trail.style.top = y + 'px';
-    trail.style.width = '10px';
-    trail.style.height = '10px';
-    trail.style.background = `radial-gradient(circle at center, 
-      var(--neon-blue) 0%, 
-      transparent 70%)`;
-    particlesContainer.appendChild(trail);
-
-    setTimeout(() => {
-      trail.style.transition = 'all 0.5s ease';
-      trail.style.opacity = '0';
-      trail.style.transform = 'scale(2)';
-      setTimeout(() => trail.remove(), 500);
-    }, 10);
-
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(124, 92, 191, 0.3)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(74, 144, 226, 0.5)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  });
-
-  particlesContainer.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    createShockwave(x, y);
-
-    for (let i = 0; i < 12; i++) {
-      setTimeout(() => createEnergySpark(x, y), i * 50);
-    }
-    
-    for (let i = 0; i < 12; i++) {
-      const angle = (i / 12) * Math.PI * 2;
-      const particle = document.createElement('div');
-      particle.className = 'particle-trail';
-      particle.style.cssText = `
-        left: ${x}px;
-        top: ${y}px;
-        width: 5px;
-        height: 5px;
-        position: absolute;
-        background: radial-gradient(circle at center, 
-          ${i % 2 ? 'var(--highlight)' : 'var(--neon-blue)'} 0%, 
-          transparent 70%);
-        filter: blur(1px);
-      `;
-      particlesContainer.appendChild(particle);
-
-      requestAnimationFrame(() => {
-        particle.style.transition = 'all 1s cubic-bezier(0.4, 0, 0.2, 1)';
-        particle.style.transform = `translate(
-          ${Math.cos(angle) * 150}px,
-          ${Math.sin(angle) * 150}px
-        ) scale(0)`;
-        particle.style.opacity = '0';
-      });
-
-      setTimeout(() => particle.remove(), 1000);
-    }
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    const cursor = e.target.closest('.feature-card');
-    if (cursor) {
-      const rect = cursor.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      cursor.style.background = `
-        radial-gradient(
-          circle at ${x}px ${y}px,
-          rgba(255,255,255,0.1),
-          rgba(255,255,255,0.05) 40%
-        )
-      `;
-    }
-  });
-  
-  const rings = document.querySelectorAll('.progress-ring-circle');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.strokeDashoffset = '0';
-      }
+        retina_detect: true,
+        fps_limit: 60
     });
-  });
-  
-  rings.forEach(ring => observer.observe(ring));
-  
-  const gridItems = document.querySelectorAll('.grid-item');
-  const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  });
-  
-  gridItems.forEach(item => {
-    item.style.opacity = '0';
-    item.style.transform = 'translateY(50px)';
-    fadeObserver.observe(item);
-  });
 
-  const solutionCards = document.querySelectorAll('.solution-card');
-  const solutionObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
+    const particlesContainer = document.querySelector('.neural-particles');
+    const canvas = document.querySelector('.particles-js-canvas-el');
+
+    const createShockwave = (x, y) => {
+        const shockwave = document.createElement('div');
+        shockwave.style.cssText = `
+            position: absolute;
+            left: ${x}px;
+            top: ${y}px;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            transform: translate(-50%, -50%);
+            animation: shockwave 1s ease-out forwards;
+        `;
+        particlesContainer.appendChild(shockwave);
+        setTimeout(() => shockwave.remove(), 1000);
+    };
+
+    const createEnergySpark = (x, y) => {
+        const spark = document.createElement('div');
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 100 + 50;
+        spark.style.cssText = `
+            position: absolute;
+            left: ${x}px;
+            top: ${y}px;
+            width: 2px;
+            height: 10px;
+            background: var(--highlight);
+            transform: translate(-50%, -50%) rotate(${angle}rad);
+            filter: blur(1px);
+            animation: spark 0.6s ease-out forwards;
+        `;
+        particlesContainer.appendChild(spark);
+        setTimeout(() => spark.remove(), 600);
+    };
+
+    particlesContainer.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const trail = document.createElement('div');
+        trail.className = 'particle-trail';
+        trail.style.left = x + 'px';
+        trail.style.top = y + 'px';
+        trail.style.width = '10px';
+        trail.style.height = '10px';
+        trail.style.background = `radial-gradient(circle at center, var(--neon-blue) 0%, transparent 70%)`;
+        particlesContainer.appendChild(trail);
+
         setTimeout(() => {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }, index * 200);
-      }
+            trail.style.transition = 'all 0.5s ease';
+            trail.style.opacity = '0';
+            trail.style.transform = 'scale(2)';
+            setTimeout(() => trail.remove(), 500);
+        }, 10);
+
+        const ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(124, 92, 191, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(74, 144, 226, 0.5)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
     });
-  }, {
-    threshold: 0.2
-  });
 
-  solutionCards.forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(50px)';
-    solutionObserver.observe(card);
-  });
+    particlesContainer.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        createShockwave(x, y);
 
-  const timelineItems = document.querySelectorAll('.timeline-content');
-  const timelineObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.transform = 'translateY(0)';
-        entry.target.style.opacity = '1';
-      }
-    });
-  }, {
-    threshold: 0.2
-  });
-
-  timelineItems.forEach(item => timelineObserver.observe(item));
-
-  window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    document.querySelector('.parallax-bg').style.transform = 
-      `translateY(${scrolled * 0.5}px)`;
-    
-    document.querySelectorAll('.section').forEach(section => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        section.style.transform = `translateY(${progress * 30}px)`;
-      }
-    });
-  });
-
-  const overlay = document.querySelector('.interaction-overlay');
-  if (overlay) {
-    overlay.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      neurons.forEach(neuron => {
-        const dx = x - neuron.x;
-        const dy = y - neuron.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if(dist < 100) {
-          neuron.activity = Math.max(neuron.activity, 1 - dist/100);
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => createEnergySpark(x, y), i * 50);
         }
-      });
-    });
-  }
+        
+        for (let i = 0; i < 12; i++) {
+            const angle = (i / 12) * Math.PI * 2;
+            const particle = document.createElement('div');
+            particle.className = 'particle-trail';
+            particle.style.cssText = `
+                left: ${x}px;
+                top: ${y}px;
+                width: 5px;
+                height: 5px;
+                position: absolute;
+                background: radial-gradient(circle at center, 
+                    ${i % 2 ? 'var(--highlight)' : 'var(--neon-blue)'} 0%, 
+                    transparent 70%);
+                filter: blur(1px);
+            `;
+            particlesContainer.appendChild(particle);
 
-  document.querySelectorAll('.lab-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      card.style.background = `
-        radial-gradient(
-          circle at ${x}px ${y}px,
-          rgba(255,255,255,0.1),
-          rgba(255,255,255,0.03) 40%
-        )
-      `;
+            requestAnimationFrame(() => {
+                particle.style.transition = 'all 1s cubic-bezier(0.4, 0, 0.2, 1)';
+                particle.style.transform = `translate(
+                    ${Math.cos(angle) * 150}px,
+                    ${Math.sin(angle) * 150}px
+                ) scale(0)`;
+                particle.style.opacity = '0';
+            });
+
+            setTimeout(() => particle.remove(), 1000);
+        }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        const cursor = e.target.closest('.feature-card');
+        if (cursor) {
+            const rect = cursor.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            cursor.style.background = `
+                radial-gradient(
+                    circle at ${x}px ${y}px,
+                    rgba(255,255,255,0.1),
+                    rgba(255,255,255,0.05) 40%
+                )
+            `;
+        }
     });
     
-    card.addEventListener('mouseleave', () => {
-      card.style.background = 'rgba(255,255,255,0.03)';
+    const rings = document.querySelectorAll('.progress-ring-circle');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.strokeDashoffset = '0';
+            }
+        });
     });
-  });
-
-  const skillGraph = document.getElementById('skillGraph');
-  if (skillGraph) {
-    const ctx = skillGraph.getContext('2d');
-    ctx.strokeStyle = '#87e2df';
-    ctx.lineWidth = 2;
     
-    function animateGraph() {
-      ctx.clearRect(0, 0, 300, 200);
-      const time = Date.now() / 1000;
-      
-      ctx.beginPath();
-      for (let x = 0; x < 300; x++) {
-        const y = 100 + Math.sin(x * 0.02 + time) * 30;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-      
-      requestAnimationFrame(animateGraph);
+    rings.forEach(ring => observer.observe(ring));
+    
+    const gridItems = document.querySelectorAll('.grid-item');
+    const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    });
+    
+    gridItems.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(50px)';
+        fadeObserver.observe(item);
+    });
+
+    const solutionCards = document.querySelectorAll('.solution-card');
+    const solutionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 200);
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    solutionCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(50px)';
+        solutionObserver.observe(card);
+    });
+
+    const timelineItems = document.querySelectorAll('.timeline-content');
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.transform = 'translateY(0)';
+                entry.target.style.opacity = '1';
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    timelineItems.forEach(item => timelineObserver.observe(item));
+
+    const serviceTiles = document.querySelectorAll('.service-tile');
+    const serviceObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 200);
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    serviceTiles.forEach(tile => {
+        tile.style.opacity = '0';
+        tile.style.transform = 'translateY(50px)';
+        serviceObserver.observe(tile);
+    });
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        document.querySelector('.parallax-bg').style.transform = 
+            `translateY(${scrolled * 0.5}px)`;
+        
+        document.querySelectorAll('.section').forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+                section.style.transform = `translateY(${progress * 30}px)`;
+            }
+        });
+    });
+
+    const overlay = document.querySelector('.interaction-overlay');
+    if (overlay) {
+        overlay.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            neurons.forEach(neuron => {
+                const dx = x - neuron.x;
+                const dy = y - neuron.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if(dist < 100) {
+                    neuron.activity = Math.max(neuron.activity, 1 - dist/100);
+                }
+            });
+        });
     }
-    
-    animateGraph();
-  }
 
-  // Animate mastery cards on scroll
-  const masteryCards = document.querySelectorAll('.mastery-card');
-  const masteryObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
+    document.querySelectorAll('.lab-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.background = `
+                radial-gradient(
+                    circle at ${x}px ${y}px,
+                    rgba(255,255,255,0.1),
+                    rgba(255,255,255,0.03) 40%
+                )
+            `;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.background = 'rgba(255,255,255,0.03)';
+        });
     });
-  }, { threshold: 0.2 });
 
-  masteryCards.forEach(card => masteryObserver.observe(card));
+    const skillGraph = document.getElementById('skillGraph');
+    if (skillGraph) {
+        const ctx = skillGraph.getContext('2d');
+        ctx.strokeStyle = '#87e2df';
+        ctx.lineWidth = 2;
+        
+        function animateGraph() {
+            ctx.clearRect(0, 0, 300, 200);
+            const time = Date.now() / 1000;
+            
+            ctx.beginPath();
+            for (let x = 0; x < 300; x++) {
+                const y = 100 + Math.sin(x * 0.02 + time) * 30;
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            requestAnimationFrame(animateGraph);
+        }
+        
+        animateGraph();
+    }
 
-  // Rotate learning cycle diagram
-  const diagram = document.querySelector('.learning-cycle-diagram img');
-  if (diagram) {
-    diagram.style.animation = 'rotate 20s linear infinite';
-  }
+    // Animate mastery cards on scroll
+    const masteryCards = document.querySelectorAll('.mastery-card');
+    const masteryObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.2 });
+
+    masteryCards.forEach(card => masteryObserver.observe(card));
+
+    // Rotate learning cycle diagram
+    const diagram = document.querySelector('.learning-cycle-diagram svg');
+    if (diagram) {
+        diagram.style.animation = 'rotate 20s linear infinite';
+    }
 });
 </script>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2ZCTY9FN65"></script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-2ZCTY9FN65"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-2ZCTY9FN65');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2ZCTY9FN65');
 </script>
-</body></html>
+<div id="promptbox_extension_root"></div></body></html>
